@@ -33,10 +33,8 @@ export default function Navbar() {
     // Updated navigation items to match provided design image
     const navLinks = [
         { label: "Home", href: "/" },
-        { label: "Prompt Market", href: "/prompt-market" },
+        { label: "all-prompts", href: "/allprompts" },
         { label: "AI Models", href: "/ai-models" },
-        { label: "Blog", href: "/blog" },
-        { label: "Pages", href: "/pages" },
         { label: "Purchase", href: "/purchase" },
     ];
     const dashboardLinks = {
