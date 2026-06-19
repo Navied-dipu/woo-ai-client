@@ -3,32 +3,34 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@heroui/react";
+import { signOut, useSession } from "@/lib/auth-client";
+
 // import { useSession, signOut } from "@/lib/auth-client";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    // const { data: session, isPending } = useSession();
-    // // console.log(session);
-    // const user = session?.user;
-    // const router = useRouter();
+    const { data: session, isPending } = useSession();
+    console.log(session);
+    const user = session?.user;
+    console.log(user)
+    const router = useRouter();
 
-    // const handleSignOut = async () => {
-    //     try {
-    //         await signOut({
-    //             fetchOptions: {
-    //                 onSuccess: () => {
-    //                     router.push("/");
-    //                     router.refresh();
-    //                 },
-    //             },
-    //         });
-    //     } catch (err) {
-    //         console.error("Sign out failed:", err);
-    //     }
-    // };
-    const user = true
-    const isPending = false
+    const handleSignOut = async () => {
+        try {
+            await signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        router.push("/");
+                        router.refresh();
+                    },
+                },
+            });
+        } catch (err) {
+            console.error("Sign out failed:", err);
+        }
+    };
+   
 
     // Updated navigation items to match provided design image
     const navLinks = [
@@ -94,24 +96,18 @@ export default function Navbar() {
                             {isPending ? (
                                 <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
                             ) : user ? (
-                                <div className="flex items-center gap-2">
-                                    {/* User Avatar Circle Icon */}
-                                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C5F623]/20 border border-[#C5F623]/40">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-[#C5F623]" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <span className="text-sm font-medium text-gray-300 hover:text-white transition">
-                                        Sign In
+                                <>
+                                    <span className="text-sm text-gray-300">
+                                        Hi, {user.name}!
                                     </span>
-                                    {/* <Button
+                                    <Button
                                         onClick={handleSignOut}
                                         variant="ghost"
                                         className="text-gray-300 hover:text-white"
                                     >
                                         Sign Out
-                                    </Button> */}
-                                </div>
+                                    </Button>
+                                </>
                             ) : (
                                 <Link
                                     href="/auth/signin"
@@ -179,31 +175,22 @@ export default function Navbar() {
                                 {isPending ? (
                                     <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
                                 ) : user ? (
-                                    <div className="flex items-center gap-3 px-4 py-3">
-                                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C5F623]/20 border border-[#C5F623]/40">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-[#C5F623]" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <span className="text-base font-medium text-gray-300">
-                                            Sign In
+                                    <>
+                                        <span className="text-sm text-gray-300">
+                                            Hi, {user.name}!
                                         </span>
-                                        {/* <Button
-                                            onClick={() => {
-                                                setIsMenuOpen(false);
-                                                handleSignOut();
-                                            }}
+                                        <Button
+                                            onClick={handleSignOut}
                                             variant="ghost"
-                                            className="text-left text-base font-medium text-red-400 hover:bg-white/5"
+                                            className="text-gray-300 hover:text-white"
                                         >
                                             Sign Out
-                                        </Button> */}
-                                    </div>
+                                        </Button>
+                                    </>
                                 ) : (
                                     <Link
                                         href="/auth/signin"
-                                        className="rounded-xl px-4 py-3 text-base font-medium text-gray-300 transition hover:bg-white/5"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        className="text-sm font-medium text-violet-400 transition hover:text-violet-300"
                                     >
                                         Sign In
                                     </Link>
