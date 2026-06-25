@@ -5,7 +5,7 @@ import { Card, Button, Link, TextField, Label, InputGroup, Input, FieldError } f
 import { Description, Radio, RadioGroup } from "@heroui/react";
 
 import { Eye, EyeSlash, Person, At, ShieldKeyhole } from "@gravity-ui/icons";
-import { signUp } from "@/lib/auth-client";
+import { authClient, signIn, signUp, } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense } from "react";
@@ -16,6 +16,7 @@ function SignupForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("user");
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -35,18 +36,21 @@ function SignupForm() {
         setError("");
         setSuccess("");
         setIsLoading(true);
-
-        const plan = role === 'user' ? 'user_free' : 'seller_free';
+        console.log(email,
+            password,
+            name,
+            role)
+        // const plan = role === 'user' ? 'user_free' : 'creator_free';
 
         try {
-            const { data, error: authError } = await signUp.email({
+            const { data, error: authError } = await authClient.signUp.email({
                 email,
                 password,
                 name,
-                role,
+                accountType: role,
                 plan
             });
-            console.log(data)
+
             if (authError) {
                 setError(authError.message || "Something went wrong during signup.");
             } else {
@@ -62,7 +66,21 @@ function SignupForm() {
             setIsLoading(false);
         }
     };
+    const handleGoogleSignin = async () => {
+        setError("");
+        setIsGoogleLoading(true);
 
+        try {
+            await signIn.social({
+                provider: "google",
+                callbackURL: redirectTo,
+            });
+        } catch (err) {
+            console.error("Google signin error:", err);
+            setError("An error occurred during Google authentication.");
+            setIsGoogleLoading(false);
+        }
+    };
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
             <Card className="w-full max-w-md p-6 shadow-sm border border-zinc-200 dark:border-zinc-800">
@@ -140,12 +158,12 @@ function SignupForm() {
                                     <Label>User</Label>
                                 </Radio.Content>
                             </Radio>
-                            <Radio value="seller">
+                            <Radio value="creator">
                                 <Radio.Control>
                                     <Radio.Indicator />
                                 </Radio.Control>
                                 <Radio.Content>
-                                    <Label>Seller</Label>
+                                    <Label>Creator</Label>
                                 </Radio.Content>
                             </Radio>
                         </RadioGroup>
@@ -174,7 +192,22 @@ function SignupForm() {
                     >
                         Sign Up
                     </Button>
-
+                    {/* Social Login */}
+                    <Button
+                        type="button"
+                        className="w-full font-semibold rounded-xl text-sm h-12"
+                        variant="tertiary"
+                        onClick={handleGoogleSignin}
+                        isLoading={isGoogleLoading}
+                        isDisabled={isLoading || isGoogleLoading}
+                    >
+                        {!isGoogleLoading && (
+                            <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                                <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
+                            </svg>
+                        )}
+                        Sign in with Google
+                    </Button>
                     {/* Navigation Option */}
                     <div className="text-center pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                         Already have an account?{" "}

@@ -11,9 +11,7 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { data: session, isPending } = useSession();
-    console.log(session);
     const user = session?.user;
-    console.log(user)
     const router = useRouter();
 
     const handleSignOut = async () => {
@@ -30,7 +28,7 @@ export default function Navbar() {
             console.error("Sign out failed:", err);
         }
     };
-   
+
 
     // Updated navigation items to match provided design image
     const navLinks = [
@@ -38,21 +36,19 @@ export default function Navbar() {
         { label: "all-prompts", href: "/allprompts" },
         { label: "AI Models", href: "/ai-models" },
         { label: "Purchase", href: "/purchase" },
+
     ];
     const dashboardLinks = {
-        seeker: '/dashboard/seeker',
-        recruiter: '/dashboard/recruiter',
+        user: '/dashboard/user',
+        creator: '/dashboard/creator',
         admin: '/dashboard/admin'
     }
-
-    // if (user?.email) {
-    //     navLinks.push(
-    //         {
-    //             label: 'Dashboard',
-    //             href: dashboardLinks[user?.role || 'seeker']
-    //         }
-    //     )
-    // }
+    // navLinks.push(
+    //     {
+    //         label: 'Dashboard',
+    //         href: dashboardLinks[user?.accountType || user?.role || 'user']
+    //     }
+    // )
 
     return (
         <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#070714]/90 backdrop-blur-md">
