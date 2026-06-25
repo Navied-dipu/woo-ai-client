@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { 
-  Input, 
-  Textarea, 
-  Select, 
-  SelectItem, 
-  RadioGroup, 
-  Radio, 
-  Button, 
-  Card, 
-  CardBody, 
-  CardHeader 
+import { useState } from "react";
+import {
+  TextField,
+  Label,
+  Input,
+  TextArea,
+  Select,
+  ListBox,
+  ListBoxItem,
+  RadioGroup,
+  Radio,
+  Button,
+  Card,
 } from "@heroui/react";
 
 export default function CreatePrompts() {
@@ -25,179 +26,167 @@ export default function CreatePrompts() {
     difficulty: "beginner",
     visibility: "public",
     thumbnail: null,
-    copyCount: 0, 
-    status: "pending", 
+    copyCount: 0,
+    status: "pending",
   });
 
-  const handleChange = (name, value) => {
+  const handleChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [field]: value,
     }));
   };
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({
-        ...prev,
-        thumbnail: e.target.files[0],
-      }));
+      handleChange("thumbnail", e.target.files[0]);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     const dataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (key === "thumbnail" && formData[key]) {
-        dataToSend.append(key, formData[key]);
-      } else {
-        dataToSend.append(key, String(formData[key]));
-      }
+      dataToSend.append(key, formData[key]);
     });
-
-    console.log("Submitting Theme-aligned Data:", formData);
+    console.log("Form submitted successfully:", formData);
   };
 
-  // HeroUI Input/Select shared custom dark slot styles
-  const inputStyles = {
-    label: "text-slate-300 group-data-[filled=true]:text-purple-400 font-medium",
-    input: [
-      "bg-transparent",
-      "text-white placeholder:text-slate-500",
-    ],
-    innerWrapper: "bg-transparent",
-    inputWrapper: [
-      "bg-[#130b2b]/60",
-      "border-purple-900/40",
-      "backdrop-blur-md",
-      "hover:border-purple-500/60",
-      "group-data-[focus=true]:border-cyan-400",
-      "group-data-[focus=true]:ring-1",
-      "group-data-[focus=true]:ring-cyan-400",
-      "!cursor-text",
-    ],
-  };
+  // Shared field styling
+  const fieldClass = "flex flex-col gap-1.5";
+  const labelClass = "text-slate-300 font-medium text-sm";
+  const inputClass =
+    "w-full bg-[#130b2b]/60 border border-purple-900/40 backdrop-blur-md text-white placeholder:text-slate-500 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 hover:border-purple-500/60 transition-colors";
 
   return (
     <div className="min-h-screen bg-[#070214] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d0b3a] via-[#070214] to-[#020007] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      
-      <Card className="w-full max-w-2xl bg-[#0d0624]/80 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_50px_-12px_rgba(168,85,247,0.2)] p-2 sm:p-6 text-white">
-        
-        <CardHeader className="flex flex-col gap-1 items-start border-b border-purple-500/10 pb-4">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">
-            Submit New Prompt
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            New prompts are marked as <span className="text-yellow-400 font-medium shadow-sm">pending</span> and undergo admin verification before reaching the live marketplace.
-          </p>
-        </CardHeader>
 
-        <CardBody className="mt-6">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            
-            {/* Prompt Title */}
-            <Input
-              isRequired
-              label="Prompt Title"
-              placeholder="e.g., Cyberpunk Character Generator"
-              variant="bordered"
-              classNames={inputStyles}
-              value={formData.title}
-              onValueChange={(val) => handleChange("title", val)}
-            />
+      <Card className="w-full max-w-2xl bg-[#0d0624]/80 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_50px_-12px_rgba(168,85,247,0.2)] p-4 sm:p-6 text-white">
 
-            {/* Prompt Description */}
-            <Textarea
-              isRequired
-              label="Prompt Description"
-              placeholder="Provide a breakdown of what this prompt yields..."
-              variant="bordered"
-              classNames={inputStyles}
-              value={formData.description}
-              onValueChange={(val) => handleChange("description", val)}
-            />
+        <Card.Header className="flex flex-col gap-1 items-start border-b border-purple-500/10 pb-4">
+          <Card.Title className="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">
+            Create New Prompt
+          </Card.Title>
+          <Card.Description className="text-xs sm:text-sm text-slate-400 mt-1">
+            New entries auto-default to <span className="text-yellow-400 font-medium">pending</span> status for moderation clearance.
+          </Card.Description>
+        </Card.Header>
+
+        <Card.Content className="mt-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+
+            {/* Title */}
+            <TextField isRequired className={fieldClass}>
+              <Label className={labelClass}>Title</Label>
+              <Input
+                placeholder="Enter prompt title"
+                value={formData.title}
+                onChange={(e) => handleChange("title", e.target.value)}
+                className={inputClass}
+              />
+            </TextField>
+
+            {/* Description */}
+            <TextField isRequired className={fieldClass}>
+              <Label className={labelClass}>Description</Label>
+              <TextArea
+                placeholder="Describe your prompt"
+                value={formData.description}
+                onChange={(e) => handleChange("description", e.target.value)}
+                className={inputClass}
+                rows={3}
+              />
+            </TextField>
 
             {/* Prompt Content */}
-            <Textarea
-              isRequired
-              label="Prompt Content"
-              placeholder="Paste the raw system instructions or prompt here..."
-              variant="bordered"
-              minRows={4}
-              classNames={inputStyles}
-              value={formData.content}
-              onValueChange={(val) => handleChange("content", val)}
-            />
-
-            {/* Category & AI Tool (Responsive Grid) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                isRequired
-                label="Category"
-                placeholder="e.g., Development, Design"
-                variant="bordered"
-                classNames={inputStyles}
-                value={formData.category}
-                onValueChange={(val) => handleChange("category", val)}
+            <TextField isRequired className={fieldClass}>
+              <Label className={labelClass}>Prompt Content</Label>
+              <TextArea
+                placeholder="Enter the actual prompt content"
+                value={formData.content}
+                onChange={(e) => handleChange("content", e.target.value)}
+                className={inputClass}
+                rows={5}
               />
+            </TextField>
 
-              <Input
-                isRequired
-                label="AI Tool"
-                placeholder="e.g., ChatGPT, Midjourney"
-                variant="bordered"
-                classNames={inputStyles}
-                value={formData.aiTool}
-                onValueChange={(val) => handleChange("aiTool", val)}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Category */}
+              <TextField isRequired className={fieldClass}>
+                <Label className={labelClass}>Category</Label>
+                <Input
+                  placeholder="e.g. Marketing, Code"
+                  value={formData.category}
+                  onChange={(e) => handleChange("category", e.target.value)}
+                  className={inputClass}
+                />
+              </TextField>
+
+              {/* AI Tool */}
+              <TextField isRequired className={fieldClass}>
+                <Label className={labelClass}>AI Tool</Label>
+                <Input
+                  placeholder="e.g. ChatGPT, Claude"
+                  value={formData.aiTool}
+                  onChange={(e) => handleChange("aiTool", e.target.value)}
+                  className={inputClass}
+                />
+              </TextField>
             </div>
 
             {/* Tags */}
-            <Input
-              label="Tags"
-              placeholder="e.g., stable-diffusion, retro, neon"
-              variant="bordered"
-              classNames={inputStyles}
-              value={formData.tags}
-              onValueChange={(val) => handleChange("tags", val)}
-            />
+            <TextField className={fieldClass}>
+              <Label className={labelClass}>Tags</Label>
+              <Input
+                placeholder="react, nextjs, ai"
+                value={formData.tags}
+                onChange={(e) => handleChange("tags", e.target.value)}
+                className={inputClass}
+              />
+            </TextField>
 
-            {/* Difficulty Level */}
+            {/* Difficulty Select */}
             <Select
-              isRequired
-              label="Difficulty Level"
-              variant="bordered"
-              classNames={{
-                label: "text-slate-300 font-medium",
-                trigger: "bg-[#130b2b]/60 border-purple-900/40 hover:border-purple-500/60 data-[open=true]:border-cyan-400 backdrop-blur-md",
-                value: "text-white font-normal",
-                popoverContent: "bg-[#0d0624] border border-purple-500/30 text-white",
-              }}
-              selectedKeys={[formData.difficulty]}
-              onChange={(e) => handleChange("difficulty", e.target.value)}
+              selectedKey={formData.difficulty}
+              onSelectionChange={(key) => handleChange("difficulty", key)}
+              className="flex flex-col gap-1.5"
             >
-              <SelectItem key="beginner" className="text-white hover:bg-purple-900/40 focus:bg-purple-900/40">Beginner</SelectItem>
-              <SelectItem key="intermediate" className="text-white hover:bg-purple-900/40 focus:bg-purple-900/40">Intermediate</SelectItem>
-              <SelectItem key="pro" className="text-white hover:bg-purple-900/40 focus:bg-purple-900/40">Pro</SelectItem>
+              <Label className={labelClass}>Difficulty</Label>
+              <Select.Trigger className="bg-[#130b2b]/60 border border-purple-900/40 hover:border-purple-500/60 data-[open]:border-cyan-400 text-white rounded-xl h-12 backdrop-blur-md px-3 flex items-center justify-between text-sm">
+                <Select.Value />
+                <Select.Indicator />
+              </Select.Trigger>
+
+              <Select.Popover className="bg-[#0d0624] border border-purple-500/30 text-white rounded-xl shadow-xl">
+                <ListBox>
+                  <ListBoxItem id="beginner" textValue="Beginner" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
+                    Beginner
+                  </ListBoxItem>
+                  <ListBoxItem id="intermediate" textValue="Intermediate" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
+                    Intermediate
+                  </ListBoxItem>
+                  <ListBoxItem id="pro" textValue="Pro" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
+                    Pro
+                  </ListBoxItem>
+                </ListBox>
+              </Select.Popover>
             </Select>
 
-            {/* Visibility Options */}
+            {/* Visibility */}
             <RadioGroup
-              label="Visibility Mode"
-              orientation="horizontal"
               value={formData.visibility}
-              onValueChange={(val) => handleChange("visibility", val)}
-              classNames={{
-                label: "text-slate-300 font-medium text-sm mb-1"
-              }}
+              onChange={(value) => handleChange("visibility", value)}
+              orientation="horizontal"
+              className="flex flex-col gap-2"
             >
-              <Radio value="public" classNames={{ label: "text-xs sm:text-sm text-slate-300", wrapper: "border-purple-500 group-data-[selected=true]:border-cyan-400" }}>Public</Radio>
-              <Radio value="private" classNames={{ label: "text-xs sm:text-sm text-slate-300", wrapper: "border-purple-500 group-data-[selected=true]:border-cyan-400" }}>Private</Radio>
+              <Label className={labelClass}>Visibility</Label>
+              <div className="flex gap-4">
+                <Radio value="public" className="text-xs sm:text-sm text-slate-300">Public</Radio>
+                <Radio value="private" className="text-xs sm:text-sm text-slate-300">Private</Radio>
+              </div>
             </RadioGroup>
 
-            {/* Custom Styled Thumbnail Upload */}
+            {/* Thumbnail Upload */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-slate-300">Thumbnail Image</label>
               <div className="relative group flex items-center justify-center w-full bg-[#130b2b]/40 border border-dashed border-purple-900/60 hover:border-cyan-500/60 rounded-xl p-4 transition-all duration-300 cursor-pointer">
@@ -211,22 +200,19 @@ export default function CreatePrompts() {
                   <p className="text-xs sm:text-sm text-purple-400 font-semibold group-hover:text-cyan-400 transition-colors">
                     {formData.thumbnail ? `✓ ${formData.thumbnail.name}` : "Click or Drag to upload thumbnail image"}
                   </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Supports PNG, JPG, or WEBP</p>
                 </div>
               </div>
             </div>
 
-            {/* Custom Submit Button matching the landing green/yellow glowing feel */}
-            <Button 
-              type="submit" 
-              size="lg" 
-              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300 hover:scale-[1.01]"
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300"
             >
-              SUBMIT PROMPT FOR REVIEW
+              Submit Prompt
             </Button>
-
           </form>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );
