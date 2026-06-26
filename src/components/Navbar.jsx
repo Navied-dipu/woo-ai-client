@@ -43,13 +43,15 @@ export default function Navbar() {
         creator: '/dashboard/creator',
         admin: '/dashboard/admin'
     }
-    // navLinks.push(
-    //     {
-    //         label: 'Dashboard',
-    //         href: dashboardLinks[user?.accountType || user?.role || 'user']
-    //     }
-    // )
 
+    if (user) {
+        navLinks.push(
+            {
+                label: 'Dashboard',
+                href: dashboardLinks[user.role || 'user']
+            }
+        )
+    }
     return (
         <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#070714]/90 backdrop-blur-md">
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">

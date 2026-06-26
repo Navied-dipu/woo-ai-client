@@ -1,15 +1,14 @@
 
 'use client';
 import { useSession } from "@/lib/auth-client";
-import { getUserSession } from "@/lib/core/session";
-// import { getUserSession } from "@/lib/core/session";
 import { LayoutSideContentLeft, Bell, Briefcase, Envelope, Gear, House, Magnifier, Person, Bookmark, FileText, CreditCard } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import { Building, Users } from "lucide-react";
 import Link from "next/link";
 
-export  function DashboardSidebar() {
-    // const user = await getUserSession();
+export function DashboardSidebar() {
+    const { data } = useSession();
+    const user = data?.user;
 
     const creatorNavLinks = [
         { icon: House, href: "/dashboard/creator", label: "Home" },
@@ -38,18 +37,13 @@ export  function DashboardSidebar() {
     ];
 
 
-    // const navItems = {
-    //     user: userNavLinks,
-    //     creator: creatorNavLinks,
-    //     admin: adminNavLinks
-    // }
+
     const navLinksMap = {
         user: userNavLinks,
         creator: creatorNavLinks,
         admin: adminNavLinks
     }
-    // const navItems = navLinksMap[user?.accountType || user?.role || 'user'];
-    const navItems = navLinksMap['creator'];
+    const navItems = navLinksMap[user?.role || 'user'];
 
 
     const navContent = <nav className="flex flex-col gap-1">

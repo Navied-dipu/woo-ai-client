@@ -5,10 +5,10 @@ import { Card, Button, Link, TextField, Label, InputGroup, Input, FieldError } f
 import { Description, Radio, RadioGroup } from "@heroui/react";
 
 import { Eye, EyeSlash, Person, At, ShieldKeyhole } from "@gravity-ui/icons";
-import { authClient, signIn, signUp, } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense } from "react";
+import { signUp } from "@/lib/auth-client";
 
 function SignupForm() {
     // Form fields
@@ -43,14 +43,13 @@ function SignupForm() {
         // const plan = role === 'user' ? 'user_free' : 'creator_free';
 
         try {
-            const { data, error: authError } = await authClient.signUp.email({
+            const { data, error: authError } = await signUp.email({
                 email,
                 password,
                 name,
                 accountType: role,
-                plan
             });
-
+            console.log(data)
             if (authError) {
                 setError(authError.message || "Something went wrong during signup.");
             } else {

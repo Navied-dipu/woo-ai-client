@@ -13,9 +13,11 @@ import {
   Radio,
   Button,
   Card,
+  toast,
 } from "@heroui/react";
+import { createPrompt } from "@/lib/api/prompts";
 
-export default function CreatePrompts() {
+export default function CreatePrompts({ user }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -25,10 +27,13 @@ export default function CreatePrompts() {
     tags: "",
     difficulty: "beginner",
     visibility: "public",
-    thumbnail: null,
+    thumbnail: null, // Holds the File object locally
     copyCount: 0,
     status: "pending",
   });
+
+  // Track upload status
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({
@@ -43,13 +48,69 @@ export default function CreatePrompts() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
+
+    let thumbnailUrl = "";
+
+    // 1. Upload to ImgBB if an image file exists
+    if (formData.thumbnail) {
+      const imgData = new FormData();
+      imgData.append("image", formData.thumbnail);
+
+      // Replace with your real ImgBB API key or use process.env.NEXT_PUBLIC_IMGBB_API_KEY
+      const IMGBB_API_KEY = "d927b80d9cb8079967b7e6672eaad49e"
+
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: imgData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          thumbnailUrl = result.data.url; // This is your hosted image URL
+          console.log("Image uploaded to ImgBB successfully:", thumbnailUrl);
+        } else {
+          console.error("ImgBB upload failed:", result.error);
+          alert("Failed to upload image. Please try again.");
+          setIsUploading(false);
+          return;
+        }
+      } catch (error) {
+        console.error("Error uploading to ImgBB:", error);
+        alert("An error occurred during image upload.");
+        setIsUploading(false);
+        return;
+      }
+    }
+
+    // 2. Prepare final data with the hosted URL instead of the raw File object
+    const finalPayload = {
+      ...formData,
+      thumbnail: thumbnailUrl, 
+      userId: user?.id,// Replaced with the online string URL
+    };
+
     const dataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      dataToSend.append(key, formData[key]);
+    Object.keys(finalPayload).forEach((key) => {
+      dataToSend.append(key, finalPayload[key]);
     });
-    console.log("Form submitted successfully:", formData);
+    const res = await createPrompt(finalPayload);
+
+    if (res?.insertedId) {
+      toast.success("Prompt posted successfully!");
+      e.target.reset();
+      // setIsRemote(false);
+      // redirect("/dashboard/recruiter/jobs");
+    }
+    console.log("Form submitted successfully with hosted image:", finalPayload);
+
+    // TODO: Send dataToSend or finalPayload to your backend API here
+
+    setIsUploading(false);
   };
 
   // Shared field styling
@@ -194,7 +255,8 @@ export default function CreatePrompts() {
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  disabled={isUploading}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
                 />
                 <div className="text-center pointer-events-none">
                   <p className="text-xs sm:text-sm text-purple-400 font-semibold group-hover:text-cyan-400 transition-colors">
@@ -207,9 +269,10 @@ export default function CreatePrompts() {
             <Button
               type="submit"
               size="lg"
-              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300"
+              disabled={isUploading}
+              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Submit Prompt
+              {isUploading ? "Uploading & Submitting..." : "Submit Prompt"}
             </Button>
           </form>
         </Card.Content>

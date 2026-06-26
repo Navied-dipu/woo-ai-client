@@ -1,11 +1,15 @@
-'use server'
 import { headers } from "next/headers";
-import { auth } from "../auth";
+import { auth } from "../auth"; // Verify this points cleanly to your server betterAuth instance
 
 export const getUserSession = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(), // some endpoints might require headers
-  });
-
-  return session?.user || null;
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers() // Await the headers structure securely
+        });
+        
+        return session?.user || null;
+    } catch (error) {
+        console.error("Error fetching server session:", error);
+        return null;
+    }
 };
