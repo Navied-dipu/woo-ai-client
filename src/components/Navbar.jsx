@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@heroui/react";
 import { signOut, useSession } from "@/lib/auth-client";
 
-// import { useSession, signOut } from "@/lib/auth-client";
+
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
@@ -33,9 +33,9 @@ export default function Navbar() {
     // Updated navigation items to match provided design image
     const navLinks = [
         { label: "Home", href: "/" },
-        { label: "all-prompts", href: "/allprompts" },
-        { label: "AI Models", href: "/ai-models" },
-        { label: "Purchase", href: "/purchase" },
+        { label: "All-prompts", href: "/allprompts" },
+        // { label: "AI Models", href: "/ai-models" },
+        // { label: "Purchase", href: "/purchase" },
 
     ];
     const dashboardLinks = {
@@ -44,11 +44,11 @@ export default function Navbar() {
         admin: '/dashboard/admin'
     }
 
-    if (user) {
+     if (user?.email) {
         navLinks.push(
             {
                 label: 'Dashboard',
-                href: dashboardLinks[user.role || 'user']
+                href: dashboardLinks[user?.role || 'user']
             }
         )
     }

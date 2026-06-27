@@ -15,7 +15,8 @@ import {
   Card,
   toast,
 } from "@heroui/react";
-import { createPrompt } from "@/lib/api/prompts";
+import { createPrompt } from "@/lib/action/prompts";
+
 
 export default function CreatePrompts({ user }) {
   const [formData, setFormData] = useState({
@@ -90,7 +91,7 @@ export default function CreatePrompts({ user }) {
     // 2. Prepare final data with the hosted URL instead of the raw File object
     const finalPayload = {
       ...formData,
-      thumbnail: thumbnailUrl, 
+      thumbnail: thumbnailUrl,
       userId: user?.id,// Replaced with the online string URL
     };
 
@@ -100,7 +101,7 @@ export default function CreatePrompts({ user }) {
     });
     const res = await createPrompt(finalPayload);
 
-    if (res?.insertedId) {
+    if (res.insertedId) {
       toast.success("Prompt posted successfully!");
       e.target.reset();
       // setIsRemote(false);

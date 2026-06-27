@@ -43,7 +43,8 @@ export function DashboardSidebar() {
         creator: creatorNavLinks,
         admin: adminNavLinks
     }
-    const navItems = navLinksMap[user?.role || 'user'];
+    const activeRole = user?.role === 'admin' ? 'admin' : (user?.accountType || 'user');
+    const navItems = navLinksMap[activeRole];
 
 
     const navContent = <nav className="flex flex-col gap-1">
