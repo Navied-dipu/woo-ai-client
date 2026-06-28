@@ -11,11 +11,15 @@ export const updateCopyCount = async (id) => {
 
 export const toggleBookmark = async (promptId, userId) => {
   // If your serverMutation takes (url, body, method)
-  return serverMutation('/api/saved', { promptid: promptId, userid: userId }, 'POST');
+  return serverMutation('/api/saved', { promptId, userId }, 'POST');
 };
 // lib/api/prompts.js
 
 export const deleteSavedPrompt = async (userId, promptId) => {
   // Utilizing your serverMutation setup with the path and payload
-  return serverMutation('/api/saved/delete', { userid: userId, promptid: promptId }, 'DELETE');
+  return serverMutation(`/api/saved/${userId}/${promptId}`, {}, 'DELETE');
+};
+export const updatePrompt = async (promptId, payload ) => {
+  // Utilizing your serverMutation setup with the path and payload
+  return serverMutation(`/api/prompts/${promptId}`, payload , 'PATCH');
 };

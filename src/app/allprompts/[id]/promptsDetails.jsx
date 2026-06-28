@@ -6,6 +6,7 @@ import { Bookmark, Flag, Copy, Star } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toggleBookmark, updateCopyCount } from "@/lib/action/prompts";
+import { useRouter } from "next/navigation";
 
 
 export default function PromptDetails({ prompts, currentUser }) {
@@ -13,6 +14,7 @@ export default function PromptDetails({ prompts, currentUser }) {
   // ✅ Hooks must always be at the top — before any conditional returns
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [localCopies, setLocalCopies] = useState(0);
+  const router = useRouter();
 
   // const isLoggedIn = false; // TODO: replace with actual session check
 
@@ -37,6 +39,7 @@ export default function PromptDetails({ prompts, currentUser }) {
       await toggleBookmark(_id, currentUser.id);
 
       toast.success(!previousState ? "Prompt bookmarked" : "Bookmark removed", { theme: "dark" });
+      router.refresh();
     } catch (err) {
       // Revert UI if the server action fails
       setIsBookmarked(previousState);

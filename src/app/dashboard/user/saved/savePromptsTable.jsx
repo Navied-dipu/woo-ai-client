@@ -1,6 +1,6 @@
-// savePromptsTable.jsx
 "use client";
-import React, { useState } from 'react';
+
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Table,
   TableHeader,
@@ -8,12 +8,20 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Avatar, // Using Avatar + standard flex wrappers to prevent the <User> import crash
+  Avatar,
   Button,
-  Tooltip
+  Chip,
+  Tooltip,
 } from "@heroui/react";
-import { deleteSavedPrompt } from '@/lib/action/prompts';
+import { deleteSavedPrompt } from "@/lib/action/prompts";
 
+const columns = [
+  { key: "prompt", label: "PROMPT" },
+  { key: "category", label: "CATEGORY" },
+  { key: "aiTool", label: "AI TOOL" },
+  { key: "savedAt", label: "SAVED AT" },
+  { key: "actions", label: "ACTIONS" },
+];
 
 const TrashIcon = (props) => (
   <svg
@@ -43,99 +51,151 @@ const TrashIcon = (props) => (
   </svg>
 );
 
-export default function SavedPromptsTable({ currentUser, savedPrompts = [] }) {
-  const [prompts, setPrompts] = useState(savedPrompts);
+export default function SavedPromptsTable({
+  currentUser,
+  savedPrompts = [],
+}) {
+  const [prompts, setPrompts] = useState([]);
   const [isDeleting, setIsDeleting] = useState(null);
 
-  const handleDelete = async (promptId) => {
-    if (!confirm("Are you sure you want to remove this saved prompt?")) return;
+  useEffect(() => {
+    const validPrompts = Array.isArray(savedPrompts)
+      ? savedPrompts.filter(
+          (item) => item && (item.id || item._id)
+        )
+      : [];
 
-    setIsDeleting(promptId);
-    try {
-      // 1. Capture the response returned by your helper action
-      const result = await deleteSavedPrompt(currentUser.id, promptId); 
+    setPrompts(validPrompts);
+  }, [savedPrompts]);
 
-      // 2. Validate condition safely based on common custom wrapper formats
-      if (!result?.error || result?.success) {
-        setPrompts(prev => prev.filter(item => item.id !== promptId));
-      } else {
-        alert("Failed to delete the prompt. Please try again.");
+  const handleDelete = useCallback(
+    async (promptId) => {
+      if (
+        !confirm(
+          "Are you sure you want to remove this saved prompt?"
+        )
+      ) {
+        return;
       }
-    } catch (error) {
-      console.error("Error deleting prompt:", error);
-      alert("An error occurred while deleting.");
-    } finally {
-      setIsDeleting(null);
-    }
-  };
+
+      setIsDeleting(promptId);
+
+      try {
+        const result = await deleteSavedPrompt(
+          currentUser.id,
+          promptId
+        );
+
+        if (!result?.error || result?.success) {
+          setPrompts((prev) =>
+            prev.filter(
+              (item) =>
+                (item.id || item._id) !== promptId
+            )
+          );
+        } else {
+          alert("Failed to delete prompt.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error deleting prompt.");
+      } finally {
+        setIsDeleting(null);
+      }
+    },
+    [currentUser]
+  );
+
+  const renderCell = useCallback(
+    (prompt, columnKey) => {
+      const promptId = prompt.id || prompt._id;
+
+      switch (columnKey) {
+        case "prompt":
+          return (
+            <div className="flex items-center gap-3">
+              <Avatar
+                src={prompt.thumbnail}
+                name={prompt.title}
+                size="sm"
+                radius="lg"
+              />
+              <div className="flex flex-col">
+                <span className="font-semibold">
+                  {prompt.title}
+                </span>
+                <span className="text-xs text-default-400 truncate max-w-[200px]">
+                  {prompt.description}
+                </span>
+              </div>
+            </div>
+          );
+
+        case "category":
+          return (
+            <Chip size="sm" variant="flat">
+              {prompt.category}
+            </Chip>
+          );
+
+        case "aiTool":
+          return prompt.aiTool;
+
+        case "savedAt":
+          return prompt.savedAt
+            ? new Date(
+                prompt.savedAt
+              ).toLocaleDateString()
+            : "-";
+
+        case "actions":
+          return (
+            <Tooltip content="Delete" color="danger">
+              <Button
+                isIconOnly
+                size="sm"
+                color="danger"
+                variant="light"
+                isLoading={isDeleting === promptId}
+                onClick={() =>
+                  handleDelete(promptId)
+                }
+              >
+                <TrashIcon />
+              </Button>
+            </Tooltip>
+          );
+
+        default:
+          return null;
+      }
+    },
+    [handleDelete, isDeleting]
+  );
 
   return (
-    <Table aria-label="Saved prompts tracking table" shadow="sm">
-      <TableHeader>
-        <TableColumn>PROMPT</TableColumn>
-        <TableColumn>CATEGORY</TableColumn>
-        <TableColumn>AI TOOL</TableColumn>
-        <TableColumn>SAVED AT</TableColumn>
-        <TableColumn align="center">ACTIONS</TableColumn>
+    <Table aria-label="Saved prompts table">
+      <TableHeader columns={columns}>
+        {(column) => (
+          <TableColumn key={column.key}>
+            {column.label}
+          </TableColumn>
+        )}
       </TableHeader>
-      <TableBody emptyContent={"No saved prompts to display."}>
-        {prompts.map((prompt) => (
-          <TableRow key={prompt.id}>
-            {/* Swapped <User> out for a bulletproof layout that matches visually */}
-            <TableCell>
-              <div className="flex items-center gap-3">
-                <Avatar radius="lg" src={prompt.thumbnail} name={prompt.title} size="sm" />
-                <div className="flex flex-col global-text-alignment">
-                  <span className="text-sm font-semibold text-default-800 leading-tight">
-                    {prompt.title}
-                  </span>
-                  <span className="text-xs text-default-400 max-w-[250px] truncate">
-                    {prompt.description}
-                  </span>
-                </div>
-              </div>
-            </TableCell>
 
-            <TableCell>
-              <span className="capitalize text-sm px-2 py-1 bg-default-100 rounded text-default-600">
-                {prompt.category}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm font-medium text-default-500">
-                {prompt.aiTool}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-xs text-default-400">
-                {new Date(prompt.savedAt).toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <div className="relative flex items-center justify-center gap-2">
-                <Tooltip color="danger" content="Delete bookmark">
-                  <Button
-                    isIconOnly
-                    size="sm"
-                    variant="light"
-                    color="danger"
-                    isLoading={isDeleting === prompt.id}
-                    onClick={() => handleDelete(prompt.id)}
-                  >
-                    <TrashIcon className="text-lg" />
-                  </Button>
-                </Tooltip>
-              </div>
-            </TableCell>
+      <TableBody
+        items={prompts}
+        emptyContent="No saved prompts found."
+      >
+        {(item) => (
+          <TableRow key={item.id || item._id}>
+            {(columnKey) => (
+              <TableCell>
+                {renderCell(item, columnKey)}
+              </TableCell>
+            )}
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );

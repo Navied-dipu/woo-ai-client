@@ -1,5 +1,4 @@
 import { getPrompts } from "@/lib/api/prompts";
-import { Chip } from "@heroui/react";
 import Link from "next/link";
 
 export default async function PromptDetailsPage({ params }) {
@@ -46,12 +45,12 @@ export default async function PromptDetailsPage({ params }) {
                     {/* Info */}
                     <div className="w-full md:w-1/2 space-y-4">
                         <div className="flex gap-2 mb-2">
-                            <Chip size="sm" className="bg-zinc-800 text-zinc-300">
+                            <span className="px-3 py-1 text-xs rounded-full bg-zinc-800 text-zinc-300">
                                 {category}
-                            </Chip>
-                            <Chip size="sm" className="bg-zinc-800 text-zinc-300">
+                            </span>
+                            <span className="px-3 py-1 text-xs rounded-full bg-zinc-800 text-zinc-300">
                                 {aiTool}
-                            </Chip>
+                            </span>
                         </div>
                         <h1 className="text-4xl font-bold tracking-tight text-white">{title}</h1>
                         <p className="text-lg text-zinc-400">{description}</p>
