@@ -23,7 +23,7 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      accountType: {
+      role: {
         type: "string",
         default: "user",
         input: true, // allows it to be set from signUp.email() payload

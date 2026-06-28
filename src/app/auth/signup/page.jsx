@@ -40,14 +40,15 @@ function SignupForm() {
             password,
             name,
             role)
-        // const plan = role === 'user' ? 'user_free' : 'creator_free';
+        const plan = role === 'user' ? 'user_free' : 'creator_free';
 
         try {
             const { data, error: authError } = await signUp.email({
                 email,
                 password,
                 name,
-                accountType: role,
+                role,
+                plan
             });
             console.log(data)
             if (authError) {

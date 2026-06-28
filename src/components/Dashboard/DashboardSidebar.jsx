@@ -43,7 +43,7 @@ export function DashboardSidebar() {
         creator: creatorNavLinks,
         admin: adminNavLinks
     }
-    const activeRole = user?.role === 'admin' ? 'admin' : (user?.accountType || 'user');
+    const activeRole = user?.role === 'admin' ? 'admin' : (user?.role || 'user');
     const navItems = navLinksMap[activeRole];
 
 

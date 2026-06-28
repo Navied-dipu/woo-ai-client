@@ -5,9 +5,11 @@ import { Card, CardContent, Button, Chip, Avatar } from "@heroui/react";
 import { Bookmark, Flag, Copy, Star } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { updateCopyCount } from "@/lib/action/prompts";
+import { toggleBookmark, updateCopyCount } from "@/lib/action/prompts";
 
-export default function PromptDetails({ prompts }) {
+
+export default function PromptDetails({ prompts, currentUser }) {
+ // Replace with actual user session data
   // ✅ Hooks must always be at the top — before any conditional returns
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [localCopies, setLocalCopies] = useState(0);
@@ -21,10 +23,25 @@ export default function PromptDetails({ prompts }) {
 
   const { _id, title, description, category, aiTool, content, instructions, difficulty, visibility } = prompts;
 
-  const handleBookmarkToggle = () => {
-    if (!isLoggedIn) return toast.error("Please log in to bookmark.");
-    setIsBookmarked(!isBookmarked);
-    toast.success(!isBookmarked ? "Prompt bookmarked" : "Bookmark removed", { theme: "dark" });
+  const handleBookmarkToggle = async () => {
+    if (!currentUser) {
+      return toast.error("Please log in to bookmark.", { theme: "dark" });
+    }
+
+    // Optimistic UI updates
+    const previousState = isBookmarked;
+    setIsBookmarked(!previousState);
+
+    try {
+      // Send both promptId (_id) and userId to the server action
+      await toggleBookmark(_id, currentUser.id);
+
+      toast.success(!previousState ? "Prompt bookmarked" : "Bookmark removed", { theme: "dark" });
+    } catch (err) {
+      // Revert UI if the server action fails
+      setIsBookmarked(previousState);
+      toast.error("Failed to update bookmark. Please try again.", { theme: "dark" });
+    }
   };
 
   const handleCopyText = async () => {
