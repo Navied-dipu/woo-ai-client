@@ -1,10 +1,8 @@
-// components/LivePlayground.jsx
 "use client";
 import { useState } from "react";
 import { Button, Code, Input } from "@heroui/react";
 import { Play, Copy, Check } from "lucide-react";
 import FadeIn from "./Fadein";
-
 
 export default function LivePlayground() {
   const [topic, setTopic] = useState("E-commerce");
@@ -23,7 +21,9 @@ export default function LivePlayground() {
       <FadeIn>
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold">Test Before You Buy</h2>
-          <p className="text-default-400 mt-2">See how our variables inject structural arguments seamlessly inside dynamic templates.</p>
+          <p className="text-default-400 mt-2">
+            See how our variables inject structural arguments seamlessly inside dynamic templates.
+          </p>
         </div>
       </FadeIn>
 
@@ -32,12 +32,27 @@ export default function LivePlayground() {
           <div className="flex flex-col justify-between gap-6">
             <div>
               <h3 className="text-lg font-bold mb-2">Dynamic Injection Variable</h3>
-              <p className="text-sm text-default-400 mb-4">Change the marketplace category to view target template layout reconfiguration changes.</p>
-              <Input label="App Category" variant="bordered" value={topic} onValueChange={setTopic} className="w-full" />
+              <p className="text-sm text-default-400 mb-4">
+                Change the marketplace category to view target template layout reconfiguration changes.
+              </p>
+              
+              {/* FIXED: Uses standard onChange to satisfy React's virtual DOM requirement */}
+              <Input 
+                label="App Category" 
+                variant="bordered" 
+                value={topic} 
+                onChange={(e) => setTopic(e.target.value)} 
+                className="w-full" 
+              />
             </div>
+            
             <div className="flex gap-2">
-              <Button color="primary" endContent={<Play size={16} />} className="w-full font-semibold">Test Sample Output</Button>
-              <Button isIconOnly variant="flat" onValueChange={handleCopy}>
+              <Button color="primary" endContent={<Play size={16} />} className="w-full font-semibold">
+                Test Sample Output
+              </Button>
+              
+              {/* FIXED: Changed from onValueChange to HeroUI's native onPress */}
+              <Button isIconOnly variant="flat" onPress={handleCopy}>
                 {copied ? <Check size={16} className="text-success" /> : <Copy size={16} />}
               </Button>
             </div>
@@ -47,7 +62,9 @@ export default function LivePlayground() {
             <Code className="bg-transparent text-success-400 font-mono text-xs leading-relaxed whitespace-pre-wrap">
               {promptText}
             </Code>
-            <div className="text-right text-[10px] text-default-500 font-mono mt-4">Woo-AI Engine • Fully Token Optimized</div>
+            <div className="text-right text-[10px] text-default-500 font-mono mt-4">
+              Woo-AI Engine • Fully Token Optimized
+            </div>
           </div>
         </div>
       </FadeIn>
