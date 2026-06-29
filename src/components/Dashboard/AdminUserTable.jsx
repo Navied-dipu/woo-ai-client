@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { Person, Briefcase, ChevronLeft, ChevronRight } from '@gravity-ui/icons';
-import { updateUserRole } from '@/lib/action/users';
+import { updateTemplateData } from '@/lib/action/users';
+
 
 export default function AdminUsersTable({ users }) {
     // Modal confirmation states
@@ -38,7 +39,7 @@ export default function AdminUsersTable({ users }) {
         try {
             const { userId, newRole } = pendingChange;
             // Server Action runs -> updates DB -> revalidatePath updates Server Component props
-            await updateUserRole(userId, newRole);
+            await updateTemplateData(userId, newRole);
         } catch (error) {
             console.error("Failed to update user role:", error);
         } finally {

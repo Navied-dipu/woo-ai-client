@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Button, Code, Input } from "@heroui/react";
 import { Play, Copy, Check } from "lucide-react";
-import FadeIn from "./FadeIn";
+import FadeIn from "./Fadein";
+
 
 export default function LivePlayground() {
   const [topic, setTopic] = useState("E-commerce");

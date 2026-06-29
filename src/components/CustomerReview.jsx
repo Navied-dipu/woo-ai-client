@@ -2,7 +2,8 @@
 "use client";
 import { Card, CardHeader, CardBody, Avatar } from "@heroui/react";
 import { Star } from "lucide-react";
-import FadeIn from "./FadeIn";
+import FadeIn from "./Fadein";
+
 
 const REVIEWS = [
   { name: "Alex Mercer", role: "SaaS Founder", text: "The development prompts on Woo-AI saved me thousands in dev costs. They drop boilerplate architecture instantly.", avatar: "https://i.pravatar.cc/150?img=11" },

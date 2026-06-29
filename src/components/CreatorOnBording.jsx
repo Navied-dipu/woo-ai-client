@@ -3,7 +3,8 @@
 import { Button } from "@heroui/react";
 import { ArrowUpRight, ShieldCheck, DollarSign } from "lucide-react";
 import Link from "next/link"; // Side note: Imported Next.js Link instead of lucide Link for the button wrapper
-import FadeIn from "./FadeIn";
+import FadeIn from "./Fadein";
+
 
 export default function CreatorOnboarding() {
     return (

@@ -1,9 +1,10 @@
 // components/FeaturedPrompts.jsx
 "use client";
-import { Card, CardHeader, CardBody, CardFooter, Button, Avatar, Chip } from "@heroui/react";
+import { Card, CardHeader,CardFooter, Button, Avatar, Chip } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { Bookmark, ArrowRight, ShoppingCart } from "lucide-react";
-import FadeIn from "./FadeIn";
+import FadeIn from "./Fadein";
+
 
 // Replaced static MOCK_PROMPTS array with a dynamic `prompts` prop pass-through.
 export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
@@ -47,11 +48,11 @@ export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
                 </Chip>
               </CardHeader>
               
-              <CardBody className="py-3">
+              <div className="py-3">
                 <h3 className="text-lg font-bold line-clamp-1 mb-2">{prompt.title}</h3>
                 <p className="text-sm text-default-500 line-clamp-3">{prompt.description}</p>
                 <p className="text-xl font-bold mt-4 text-foreground">${prompt.price}</p>
-              </CardBody>
+              </div>
               
               <CardFooter className="justify-between border-t border-default-100/50 mt-auto">
                 <Button isIconOnly variant="light" radius="full">
