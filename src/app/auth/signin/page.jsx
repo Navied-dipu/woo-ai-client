@@ -37,7 +37,7 @@ function SigninForm() {
                 email,
                 password,
             });
-            console.log(data)
+            // console.log(data)
             if (authError) {
                 setError(authError.message || "Invalid email or password.");
             } else {

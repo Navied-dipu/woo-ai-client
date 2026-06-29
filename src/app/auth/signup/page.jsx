@@ -50,7 +50,7 @@ function SignupForm() {
                 role,
                 plan
             });
-            console.log(data)
+            // console.log(data)
             if (authError) {
                 setError(authError.message || "Something went wrong during signup.");
             } else {

@@ -68,17 +68,15 @@ export default function AdminUsersTable({ users }) {
                                 <th className="py-5 px-6 font-normal">User Name</th>
                                 <th className="py-5 px-6 font-normal">Email Address</th>
                                 <th className="py-5 px-6 font-normal">Role</th>
-                                <th className="py-5 px-6 font-normal">Join Date</th>
-                                <th className="py-5 px-6 font-normal">Status</th>
                                 <th className="py-5 px-6 font-normal text-right">Actions</th>
                             </tr>
                         </thead>
 
                         {/* Body */}
                         <tbody className="divide-y divide-zinc-800/60 bg-[#1e1e1e]">
-                            {users.map((user) => {
+                            {users.map((user, index) => {
                                 const userId = getUserId(user);
-                                const userRole = user.role?.toLowerCase() || 'creator';
+                                const userRole = user?.role?.toLowerCase();
                                 const userStatus = user.status || 'Active';
 
                                 return (
@@ -105,15 +103,15 @@ export default function AdminUsersTable({ users }) {
                                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-purple-950/40 text-purple-300 border border-purple-800/50 capitalize">
                                                     Admin
                                                 </span>
-                                            ) : userRole === 'recruiter' ? (
+                                            ) : userRole === 'creator' ? (
                                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-zinc-100 text-zinc-900 shadow-sm">
                                                     <Briefcase width={12} height={12} />
-                                                    Recruiter
+                                                    Creator
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-zinc-800/50 text-zinc-400 border border-zinc-700/50 capitalize">
                                                     <Person width={12} height={12} />
-                                                    Creator
+                                                    user
                                                 </span>
                                             )}
                                         </td>
