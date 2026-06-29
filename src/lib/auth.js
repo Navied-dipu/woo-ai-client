@@ -6,10 +6,12 @@ import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 // import { admin } from "better-auth/plugins";
 
-const client = new MongoClient(process.env.MONGO_URI);
+const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/dummy";
+const client = new MongoClient(mongoUri);
 const db = client.db("wooaiDB");
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   database: mongodbAdapter(db, {
     client,
   }),
