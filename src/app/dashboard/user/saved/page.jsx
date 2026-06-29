@@ -5,6 +5,8 @@ import SavedPromptsTable from "./savePromptsTable";
 import { getUserSession } from "@/lib/core/session";
 import { getPrompts, getSavedPrompts } from "@/lib/api/prompts";
 
+export const dynamic = "force-dynamic";
+
 const SavePromptsPage = async () => {
   const currentUser = await getUserSession();
 
