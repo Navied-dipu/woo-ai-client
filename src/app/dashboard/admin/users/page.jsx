@@ -5,7 +5,7 @@ import React from 'react';
 
 const page = async () => {
     const users = await getAllUsers();
-    console.log('users', users);
+    // console.log('users', users);
     return (
         <div>
             <AdminUsersTable users={users} />

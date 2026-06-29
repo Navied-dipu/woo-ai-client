@@ -5,7 +5,7 @@ import React from 'react';
 
 const page = async () => {
     const prompts = await getPrompts();
-    console.log(prompts)
+    // console.log(prompts)
     return (
         <div className="min-h-screen bg-[#0d0d0f] p-8 text-neutral-100">
             <div className="max-w-7xl mx-auto space-y-6">

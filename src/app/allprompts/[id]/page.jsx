@@ -7,7 +7,7 @@ import { getUserSession } from '@/lib/core/session';
 const Page = async ({ params }) => {
     const { id } = await params;
     const currentUser = await getUserSession(); // Replace with actual session retrieval logic
-    console.log(currentUser.id)
+    // console.log(currentUser.id)
     const promptsDetails = await getPromptsId(id);
     if (!promptsDetails) {
         return (
