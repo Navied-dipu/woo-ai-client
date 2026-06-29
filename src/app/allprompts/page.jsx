@@ -1,7 +1,7 @@
 
 import PromptCard from "@/components/Dashboard/PromptCard";
 import { getPrompts } from "@/lib/api/prompts";
-
+export const dynamic = 'force-dynamic';
 const page = async () => {
     let prompts = [];
     try {
@@ -36,4 +36,4 @@ const page = async () => {
     );
 };
 
-export default page;
+export default page;
