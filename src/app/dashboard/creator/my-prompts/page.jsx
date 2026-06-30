@@ -3,6 +3,8 @@ import MyPromptsTable from '@/components/Dashboard/creator/MyPromptsTable';
 import { getPromptsByUserId } from '@/lib/api/prompts';
 import { getUserSession } from '@/lib/core/session';
 
+export const dynamic = 'force-dynamic';
+
 const page = async () => {
     const user = await getUserSession();
 

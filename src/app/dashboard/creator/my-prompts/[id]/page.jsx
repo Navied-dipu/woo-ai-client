@@ -1,4 +1,4 @@
-import { getPromptsId } from "@/lib/api/prompts";
+
 import UpdatePrompts from "./UpdatePrompt";
 // Adjust path as necessary
 

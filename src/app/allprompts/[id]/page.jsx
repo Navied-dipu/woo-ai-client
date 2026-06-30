@@ -3,6 +3,7 @@ import React from 'react';
 import PromptDetails from './promptsDetails';
 import { getUserSession } from '@/lib/core/session';
 
+export const dynamic = 'force-dynamic';
 
 const Page = async ({ params }) => {
     const { id } = await params;

@@ -2,6 +2,8 @@ import SavedPromptsTable from '@/components/Dashboard/user/SavePromptsTable';
 import { getPromptsByIds, getSavedPrompts } from '@/lib/api/prompts';
 import { getUserSession } from '@/lib/core/session';
 
+export const dynamic = 'force-dynamic';
+
 const Page = async () => {
   const user = await getUserSession();
   const userId = user?.id;
