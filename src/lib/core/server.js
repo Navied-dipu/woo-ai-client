@@ -8,17 +8,27 @@ export const serverFetch = async (path) => {
   return handleStatusCode(res);
 };
 
+// export const serverMutation = async (path, data, method = "POST") => {
+//   const res = await fetch(`${baseUrl}${path}`, {
+//     method: method,
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   return handleStatusCode(res);
+// };
 export const serverMutation = async (path, data, method = "POST") => {
   const res = await fetch(`${baseUrl}${path}`, {
     method: method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    // FIX HERE: Do not attach a body string if data is null/undefined
+    ...(data && { body: JSON.stringify(data) }),
   });
   return handleStatusCode(res);
 };
-
 // 1. Handle HTTP errors directly before parsing JSON
 // handle 401, 404, 403
 const handleStatusCode = (res) => {

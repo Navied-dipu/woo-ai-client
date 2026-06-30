@@ -12,7 +12,7 @@ export function DashboardSidebar() {
 
     const creatorNavLinks = [
         { icon: House, href: "/dashboard/creator", label: "Home" },
-        { icon: Magnifier, href: "/dashboard/creator/prompts", label: "Prompts" },
+        { icon: Magnifier, href: "/dashboard/creator/my-prompts", label: "Prompts" },
         { icon: Bell, href: "/dashboard/creator/prompts/new", label: "Create Prompt" },
         { icon: Briefcase, href: "/dashboard/creator/profile", label: "Creator Profile" },
         { icon: Envelope, href: "/messages", label: "Messages" },

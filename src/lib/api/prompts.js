@@ -11,3 +11,7 @@ export const getSavedPrompts = async (userId) => {
   const res = await serverFetch(`/api/saved/${userId}`);
   return res;
 };
+export const getPromptsByUserId = async (userId) => {
+  const res = await serverFetch(`/api/prompts/user/${userId}`);
+  return res;
+};
