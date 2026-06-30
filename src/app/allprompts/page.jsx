@@ -1,4 +1,5 @@
-import PromptCard from "@/components/Dashboard/PromptCard";
+
+import PromptGrid from "@/components/Dashboard/PromptGrid";
 import { getPrompts } from "@/lib/api/prompts";
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +8,7 @@ const page = async () => {
     let prompts = [];
     try {
         const data = await getPrompts();
-        // Handle different API response shapes: array, { data: [] }, { prompts: [] }
+        
         if (Array.isArray(data)) {
             prompts = data;
         } else if (Array.isArray(data?.data)) {
@@ -16,8 +17,7 @@ const page = async () => {
             prompts = data.prompts;
         }
 
-        // 🔥 FILTER: Only show prompts approved by admin
-        // Case-insensitive: handles "approved", "Approved", "APPROVED" from backend
+        // FILTER: Only pass items with approved state to the frontend dashboard
         prompts = prompts.filter(
             (item) => item.status?.toLowerCase() === "approved"
         );
@@ -34,13 +34,7 @@ const page = async () => {
                     <p className="text-zinc-600 text-sm mt-2">Prompts will appear here once approved by an admin.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                    {prompts.map((item) => {
-                        // Safely resolve MongoDB _id — could be a plain string or { $oid: "..." }
-                        const id = item._id?.$oid || item._id;
-                        return <PromptCard key={id} prompt={{ ...item, _id: id }} />;
-                    })}
-                </div>
+                <PromptGrid initialPrompts={prompts} />
             )}
         </div>
     );

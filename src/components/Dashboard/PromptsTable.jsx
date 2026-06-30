@@ -19,13 +19,13 @@ const PromptsTable = ({ prompts }) => {
         const result = await updatePrompt(id, { status: 'Rejected' });
     };
 
-    // Status mapping for visual styling
+    // Status mapping for visual styling match to marketplace aesthetics
     const getStatusDetails = (status) => {
         switch (status?.toLowerCase()) {
             case 'approved':
-                return { color: 'text-emerald-500', label: 'Approved' };
+                return { color: 'text-emerald-600', label: 'Approved' };
             case 'rejected':
-                return { color: 'text-rose-500', label: 'Rejected' };
+                return { color: 'text-rose-600', label: 'Rejected' };
             case 'pending':
             default:
                 return { color: 'text-amber-500', label: 'Pending' };
@@ -38,41 +38,41 @@ const PromptsTable = ({ prompts }) => {
     };
 
     return (
-        <div className="w-full bg-[#121214] text-neutral-200 p-6 rounded-lg">
+        <div className="w-full bg-white text-neutral-800 p-6 rounded-2xl border border-neutral-100 shadow-sm">
             <Table className="bg-transparent border-none">
                 <Table.ScrollContainer>
                     <Table.Content aria-label="Prompt management table">
                         <Table.Header>
                             {/* Primary identifying column */}
-                            <Table.Column isRowHeader className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column isRowHeader className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Prompt Title
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Category
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 AI Tool
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Difficulty
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Copies
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Visibility
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4">
                                 Status
                             </Table.Column>
 
-                            <Table.Column className="text-neutral-400 font-medium pb-4 border-b border-neutral-800 text-right">
+                            <Table.Column className="text-neutral-500 font-semibold pb-4 border-b border-neutral-100 text-xs tracking-wider uppercase bg-neutral-50/50 p-4 text-right">
                                 Actions
                             </Table.Column>
                         </Table.Header>
@@ -82,71 +82,71 @@ const PromptsTable = ({ prompts }) => {
                                 const statusInfo = getStatusDetails(prompt.status);
 
                                 return (
-                                    <Table.Row key={promptId} className="border-b border-neutral-800/50 hover:bg-neutral-900/30 transition-colors">
+                                    <Table.Row key={promptId} className="border-b border-neutral-100 hover:bg-neutral-50/70 transition-colors">
                                         {/* Prompt Avatar & Title */}
-                                        <Table.Cell className="py-4 align-middle">
+                                        <Table.Cell className="py-4 px-4 align-middle">
                                             <div className="flex items-center gap-3">
                                                 {prompt.thumbnail ? (
-                                                    <img 
-                                                        src={prompt.thumbnail} 
-                                                        alt={prompt.title} 
-                                                        className="w-9 h-9 object-cover rounded bg-neutral-800"
+                                                    <img
+                                                        src={prompt.thumbnail}
+                                                        alt={prompt.title}
+                                                        className="w-10 h-10 object-cover rounded-xl bg-neutral-100 border border-neutral-200/60"
                                                     />
                                                 ) : (
-                                                    <div className="w-9 h-9 flex items-center justify-center bg-neutral-800 text-neutral-300 rounded font-semibold text-sm tracking-wider">
+                                                    <div className="w-10 h-10 flex items-center justify-center bg-neutral-100 text-neutral-600 border border-neutral-200/60 rounded-xl font-bold text-xs tracking-wider">
                                                         {getInitials(prompt.title)}
                                                     </div>
                                                 )}
-                                                <span className="font-medium text-neutral-200">{prompt.title}</span>
+                                                <span className="font-semibold text-neutral-900 text-sm">{prompt.title}</span>
                                             </div>
                                         </Table.Cell>
 
                                         {/* Category Pill */}
-                                        <Table.Cell className="py-4 align-middle">
-                                            <span className="px-3 py-1 bg-neutral-800/60 text-neutral-400 rounded-full text-xs capitalize">
+                                        <Table.Cell className="py-4 px-4 align-middle">
+                                            <span className="px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-xs font-medium capitalize">
                                                 {prompt.category}
                                             </span>
                                         </Table.Cell>
 
                                         {/* AI Tool */}
-                                        <Table.Cell className="py-4 align-middle text-neutral-400">
+                                        <Table.Cell className="py-4 px-4 align-middle text-neutral-600 text-sm font-medium">
                                             {prompt.aiTool}
                                         </Table.Cell>
 
                                         {/* Difficulty */}
-                                        <Table.Cell className="py-4 align-middle text-neutral-400 capitalize">
+                                        <Table.Cell className="py-4 px-4 align-middle text-neutral-600 text-sm capitalize">
                                             {prompt.difficulty}
                                         </Table.Cell>
 
                                         {/* Copy Count */}
-                                        <Table.Cell className="py-4 align-middle text-neutral-400">
+                                        <Table.Cell className="py-4 px-4 align-middle text-neutral-600 text-sm font-medium">
                                             {prompt.copyCount ?? 0}
                                         </Table.Cell>
 
                                         {/* Visibility */}
-                                        <Table.Cell className="py-4 align-middle text-neutral-400 capitalize">
+                                        <Table.Cell className="py-4 px-4 align-middle text-neutral-600 text-sm capitalize">
                                             {prompt.visibility}
                                         </Table.Cell>
 
                                         {/* Status Dot */}
-                                        <Table.Cell className="py-4 align-middle">
+                                        <Table.Cell className="py-4 px-4 align-middle">
                                             <div className="flex items-center gap-2">
                                                 <CircleArrowDownFill className={`w-2 h-2 ${statusInfo.color}`} />
-                                                <span className={`text-sm font-medium ${statusInfo.color}`}>
+                                                <span className={`text-xs font-semibold ${statusInfo.color}`}>
                                                     {statusInfo.label}
                                                 </span>
                                             </div>
                                         </Table.Cell>
-                                    
+
                                         {/* Actions Panel */}
-                                        <Table.Cell className="py-4 align-middle text-right">
+                                        <Table.Cell className="py-4 px-4 align-middle text-right">
                                             <div className="flex justify-end gap-2">
                                                 {prompt.status?.toLowerCase() !== 'approved' && (
                                                     <Button
                                                         size="sm"
                                                         variant="light"
                                                         onClick={() => handleApprove(promptId)}
-                                                        className="bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-500 border border-emerald-900/60 rounded px-3 py-1 text-xs font-medium transition-colors"
+                                                        className="bg-[#0080FF] hover:bg-[#0070DF] text-white shadow-sm rounded-xl px-4 py-1.5 text-xs font-semibold transition-colors"
                                                     >
                                                         Approve
                                                     </Button>
@@ -156,7 +156,7 @@ const PromptsTable = ({ prompts }) => {
                                                         size="sm"
                                                         variant="light"
                                                         onClick={() => handleReject(promptId)}
-                                                        className="bg-rose-950/20 hover:bg-rose-900/40 text-rose-500 border border-rose-900/40 rounded px-3 py-1 text-xs font-medium transition-colors"
+                                                        className="bg-neutral-50 hover:bg-rose-50 text-neutral-600 hover:text-rose-600 border border-neutral-200/80 hover:border-rose-200 rounded-xl px-4 py-1.5 text-xs font-semibold transition-colors"
                                                     >
                                                         Reject
                                                     </Button>

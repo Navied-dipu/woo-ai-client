@@ -24,6 +24,7 @@ export default function PromptDetails({ prompts, currentUser }) {
   );
 
   const { _id, title, description, category, aiTool, content, instructions, difficulty, visibility } = prompts;
+  const promptId = _id?.$oid || _id;
 
   const handleBookmarkToggle = async () => {
     if (!currentUser) {
@@ -35,8 +36,8 @@ export default function PromptDetails({ prompts, currentUser }) {
     setIsBookmarked(!previousState);
 
     try {
-      // Send both promptId (_id) and userId to the server action
-      await toggleBookmark(_id, currentUser.id);
+      // Send both promptId and userId to the server action
+      await toggleBookmark(promptId, currentUser.id);
 
       toast.success(!previousState ? "Prompt bookmarked" : "Bookmark removed", { theme: "dark" });
       router.refresh();
@@ -51,7 +52,7 @@ export default function PromptDetails({ prompts, currentUser }) {
     if (!content) return toast.error("No content to copy.");
     try {
       await navigator.clipboard.writeText(content);
-      await updateCopyCount(_id);
+      await updateCopyCount(promptId);
       setLocalCopies(prev => prev + 1);
       toast.success("Prompt copied to clipboard", { theme: "dark" });
     } catch (err) {

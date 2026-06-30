@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Person, Briefcase, ChevronLeft, ChevronRight } from '@gravity-ui/icons';
 import { updateTemplateData } from '@/lib/action/users';
 
-
 export default function AdminUsersTable({ users }) {
     // Modal confirmation states
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -59,93 +58,95 @@ export default function AdminUsersTable({ users }) {
 
     return (
         <div className="relative w-full">
-            <div className="w-full bg-[#1e1e1e] border border-zinc-800 rounded-xl overflow-hidden shadow-2xl font-sans">
+            <div className="w-full bg-white border border-neutral-100 rounded-2xl overflow-hidden shadow-sm font-sans">
                 <div className="overflow-x-auto">
-                    <table className="w-full border-collapse text-left text-sm text-zinc-400">
+                    <table className="w-full border-collapse text-left text-sm text-neutral-600">
 
                         {/* Header */}
                         <thead>
-                            <tr className="border-b border-zinc-800 text-zinc-400 font-medium select-none">
-                                <th className="py-5 px-6 font-normal">User Name</th>
-                                <th className="py-5 px-6 font-normal">Email Address</th>
-                                <th className="py-5 px-6 font-normal">Role</th>
-                                <th className="py-5 px-6 font-normal text-right">Actions</th>
+                            <tr className="border-b border-neutral-100 text-neutral-500 font-semibold select-none bg-neutral-50/50">
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase">User Name</th>
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase">Email Address</th>
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase">Role</th>
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase">Join Date</th>
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase">Status</th>
+                                <th className="py-4 px-6 font-semibold text-xs tracking-wider uppercase text-right">Actions</th>
                             </tr>
                         </thead>
 
                         {/* Body */}
-                        <tbody className="divide-y divide-zinc-800/60 bg-[#1e1e1e]">
+                        <tbody className="divide-y divide-neutral-100 bg-white">
                             {users.map((user, index) => {
                                 const userId = getUserId(user);
                                 const userRole = user?.role?.toLowerCase();
                                 const userStatus = user.status || 'Active';
 
                                 return (
-                                    <tr key={userId} className="hover:bg-zinc-900/40 transition-colors duration-150">
+                                    <tr key={userId} className="hover:bg-neutral-50/70 transition-colors duration-150">
 
                                         {/* User Name + Initial Avatar */}
-                                        <td className="py-4 px-6 font-medium text-zinc-200 whitespace-nowrap">
+                                        <td className="py-4 px-6 font-semibold text-neutral-900 whitespace-nowrap">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-zinc-700/60 flex items-center justify-center text-xs text-zinc-300 font-bold tracking-wider">
+                                                <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-600 border border-neutral-200/60 font-bold tracking-wider">
                                                     {user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U'}
                                                 </div>
-                                                <span>{user.name || 'Unknown User'}</span>
+                                                <span className="text-sm font-semibold text-neutral-900">{user.name || 'Unknown User'}</span>
                                             </div>
                                         </td>
 
                                         {/* Email Address */}
-                                        <td className="py-4 px-6 text-zinc-400 whitespace-nowrap">
+                                        <td className="py-4 px-6 text-neutral-600 whitespace-nowrap text-sm">
                                             {user.email}
                                         </td>
 
                                         {/* Role Badge */}
                                         <td className="py-4 px-6 whitespace-nowrap">
                                             {userRole === 'admin' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-purple-950/40 text-purple-300 border border-purple-800/50 capitalize">
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-purple-50 text-purple-700 border border-purple-100 capitalize">
                                                     Admin
                                                 </span>
                                             ) : userRole === 'creator' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-zinc-100 text-zinc-900 shadow-sm">
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200/40 capitalize">
                                                     <Briefcase width={12} height={12} />
                                                     Creator
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-zinc-800/50 text-zinc-400 border border-zinc-700/50 capitalize">
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-neutral-50 text-neutral-600 border border-neutral-200/60 capitalize">
                                                     <Person width={12} height={12} />
-                                                    user
+                                                    User
                                                 </span>
                                             )}
                                         </td>
 
                                         {/* Join Date */}
-                                        <td className="py-4 px-6 text-zinc-400 whitespace-nowrap">
+                                        <td className="py-4 px-6 text-neutral-500 whitespace-nowrap text-sm">
                                             {formatDate(user.createdAt)}
                                         </td>
 
                                         {/* Status Badge */}
                                         <td className="py-4 px-6 whitespace-nowrap">
                                             {userStatus === 'Active' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium rounded-full bg-emerald-950/30 text-emerald-400 border border-emerald-900/40">
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-950/30 text-red-400 border border-red-900/40">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-rose-50 text-rose-700 border border-rose-100">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                                                     Suspended
                                                 </span>
                                             )}
                                         </td>
 
                                         {/* Actions Column */}
-                                        <td className="py-4 px-6 text-right whitespace-nowrap text-xs font-medium">
-                                            <div className="flex items-center justify-end gap-4">
+                                        <td className="py-4 px-6 text-right whitespace-nowrap text-xs font-semibold">
+                                            <div className="flex items-center justify-end gap-3.5">
 
                                                 {/* Change Roles Triggers via confirmation flow */}
                                                 {userRole !== 'admin' && (
                                                     <button
                                                         onClick={() => initiateRoleChange(userId, user.name, 'admin')}
-                                                        className="text-zinc-400 hover:text-white transition-colors"
+                                                        className="text-neutral-500 hover:text-[#0080FF] transition-colors"
                                                     >
                                                         Make Admin
                                                     </button>
@@ -153,7 +154,7 @@ export default function AdminUsersTable({ users }) {
                                                 {userRole !== 'creator' && (
                                                     <button
                                                         onClick={() => initiateRoleChange(userId, user.name, 'creator')}
-                                                        className="text-zinc-400 hover:text-white transition-colors"
+                                                        className="text-neutral-500 hover:text-[#0080FF] transition-colors"
                                                     >
                                                         Make Creator
                                                     </button>
@@ -163,7 +164,7 @@ export default function AdminUsersTable({ users }) {
                                                 {userStatus === 'Active' ? (
                                                     <button
                                                         onClick={() => handleStatusChange(userId, 'Suspended')}
-                                                        className="text-red-500 hover:text-red-400 transition-colors pl-2 border-l border-zinc-800"
+                                                        className="text-rose-600 hover:text-rose-700 transition-colors pl-3 border-l border-neutral-100"
                                                     >
                                                         Suspend
                                                     </button>
@@ -171,13 +172,13 @@ export default function AdminUsersTable({ users }) {
                                                     <>
                                                         <button
                                                             onClick={() => handleStatusChange(userId, 'Active')}
-                                                            className="text-emerald-500 hover:text-emerald-400 transition-colors pl-2 border-l border-zinc-800"
+                                                            className="text-emerald-600 hover:text-emerald-700 transition-colors pl-3 border-l border-neutral-100"
                                                         >
                                                             Activate
                                                         </button>
                                                         <button
                                                             onClick={() => handleDelete(userId)}
-                                                            className="text-zinc-400 hover:text-red-400 transition-colors"
+                                                            className="text-neutral-400 hover:text-rose-600 transition-colors"
                                                         >
                                                             Delete
                                                         </button>
@@ -194,28 +195,28 @@ export default function AdminUsersTable({ users }) {
                 </div>
 
                 {/* Pagination Footer */}
-                <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800 text-xs text-zinc-500 select-none">
+                <div className="flex items-center justify-between px-6 py-4 border-t border-neutral-100 text-xs text-neutral-500 select-none">
                     <div>
                         Showing 1 to {users.length} of 12,842 users
                     </div>
                     <div className="flex items-center gap-1">
-                        <button className="p-1 hover:text-zinc-300 transition-colors">
+                        <button className="p-1 text-neutral-400 hover:text-neutral-600 transition-colors">
                             <ChevronLeft width={16} height={16} />
                         </button>
-                        <button className="w-6 h-6 flex items-center justify-center bg-white text-zinc-900 rounded font-medium">
+                        <button className="w-6 h-6 flex items-center justify-center bg-[#0080FF] text-white rounded-lg font-semibold text-xs shadow-sm">
                             1
                         </button>
-                        <button className="w-6 h-6 flex items-center justify-center hover:bg-zinc-800/60 rounded text-zinc-400 transition-colors">
+                        <button className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 rounded-lg text-neutral-500 font-medium transition-colors">
                             2
                         </button>
-                        <button className="w-6 h-6 flex items-center justify-center hover:bg-zinc-800/60 rounded text-zinc-400 transition-colors">
+                        <button className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 rounded-lg text-neutral-500 font-medium transition-colors">
                             3
                         </button>
-                        <span className="px-1 text-zinc-600">...</span>
-                        <button className="w-fit px-1.5 h-6 flex items-center justify-center hover:bg-zinc-800/60 rounded text-zinc-400 transition-colors">
+                        <span className="px-1 text-neutral-300">...</span>
+                        <button className="w-fit px-1.5 h-6 flex items-center justify-center hover:bg-neutral-100 rounded-lg text-neutral-500 font-medium transition-colors">
                             1285
                         </button>
-                        <button className="p-1 hover:text-zinc-300 transition-colors">
+                        <button className="p-1 text-neutral-400 hover:text-neutral-600 transition-colors">
                             <ChevronRight width={16} height={16} />
                         </button>
                     </div>
@@ -224,29 +225,29 @@ export default function AdminUsersTable({ users }) {
 
             {/* Confirmation Modal Overlay */}
             {isConfirmOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/60">
-                    <div className="w-full max-w-sm bg-[#1e1e1e] border border-zinc-800 rounded-xl p-6 shadow-2xl space-y-6">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/40">
+                    <div className="w-full max-w-sm bg-white border border-neutral-100 rounded-2xl p-6 shadow-xl space-y-6">
                         <div className="space-y-2">
-                            <h3 className="text-base font-semibold text-zinc-100">
+                            <h3 className="text-base font-bold text-neutral-900">
                                 Confirm Role Change
                             </h3>
-                            <p className="text-xs text-zinc-400 leading-relaxed">
-                                Are you sure you want to change the role of <span className="text-zinc-200 font-medium">{pendingChange?.userName}</span> to <span className="text-zinc-200 font-medium capitalize">{pendingChange?.newRole}</span>? This alters system access and application flow parameters permissions immediately.
+                            <p className="text-xs text-neutral-500 leading-relaxed">
+                                Are you sure you want to change the role of <span className="text-neutral-900 font-semibold">{pendingChange?.userName}</span> to <span className="text-neutral-900 font-semibold capitalize">{pendingChange?.newRole}</span>? This alters system access and application flow parameters permissions immediately.
                             </p>
                         </div>
 
-                        <div className="flex items-center justify-end gap-3 text-xs font-medium">
+                        <div className="flex items-center justify-end gap-2 text-xs font-semibold">
                             <button
                                 disabled={isUpdating}
                                 onClick={() => { setIsConfirmOpen(false); setPendingChange(null); }}
-                                className="px-4 py-2 text-zinc-400 hover:text-zinc-200 bg-zinc-800/40 hover:bg-zinc-800 border border-zinc-800 rounded-md transition-colors disabled:opacity-5"
+                                className="px-4 py-2 text-neutral-600 hover:text-neutral-800 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200/80 rounded-xl transition-colors disabled:opacity-50"
                             >
                                 Cancel
                             </button>
                             <button
                                 disabled={isUpdating}
                                 onClick={confirmRoleChange}
-                                className="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-500 rounded-md transition-colors shadow-lg shadow-indigo-600/10 disabled:opacity-50 min-w-[76px] flex items-center justify-center"
+                                className="px-4 py-2 text-white bg-[#0080FF] hover:bg-[#0070DF] rounded-xl transition-colors shadow-sm disabled:opacity-50 min-w-[76px] flex items-center justify-center"
                             >
                                 {isUpdating ? (
                                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

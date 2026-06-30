@@ -5,7 +5,11 @@ export const getPrompts = async () => {
 };
 // Fetch a single prompt by ID → returns a single prompt object
 export const getPromptById = async (id) => {
-  return serverFetch(`/api/prompts/${id}`);
+  const res = await serverFetch(`/api/prompts/${id}`);
+  // Unwrap the response if the backend puts it inside a .data or .prompt property
+  if (res?.data) return res.data;
+  if (res?.prompt) return res.prompt;
+  return res;
 };
 
 // Fetch multiple prompts by an array of IDs → returns an array of prompt objects
