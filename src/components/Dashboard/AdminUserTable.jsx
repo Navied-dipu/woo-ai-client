@@ -38,7 +38,7 @@ export default function AdminUsersTable({ users }) {
         try {
             const { userId, newRole } = pendingChange;
             // Server Action runs -> updates DB -> revalidatePath updates Server Component props
-            await updateTemplateData(userId, newRole);
+            await updateTemplateData(userId, { role: newRole });
         } catch (error) {
             console.error("Failed to update user role:", error);
         } finally {

@@ -1,21 +1,7 @@
-"use client";
+'use client'
 import { useState } from "react";
-import {
-  TextField,
-  Label,
-  Input,
-  TextArea,
-  Select,
-  ListBox,
-  ListBoxItem,
-  RadioGroup,
-  Radio,
-  Button,
-  Card,
-  toast,
-} from "@heroui/react";
+import { toast } from "react-toastify";
 import { createPrompt } from "@/lib/action/prompts";
-
 
 export default function CreatePrompts({ user }) {
   const [formData, setFormData] = useState({
@@ -122,130 +108,135 @@ export default function CreatePrompts({ user }) {
   return (
     <div className="min-h-screen bg-[#070214] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d0b3a] via-[#070214] to-[#020007] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
 
-      <Card className="w-full max-w-2xl bg-[#0d0624]/80 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_50px_-12px_rgba(168,85,247,0.2)] p-4 sm:p-6 text-white">
+      <div className="w-full max-w-2xl bg-[#0d0624]/80 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_50px_-12px_rgba(168,85,247,0.2)] p-4 sm:p-6 text-white rounded-2xl">
 
-        <Card.Header className="flex flex-col gap-1 items-start border-b border-purple-500/10 pb-4">
-          <Card.Title className="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">
+        <div className="flex flex-col gap-1 items-start border-b border-purple-500/10 pb-4">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">
             Create New Prompt
-          </Card.Title>
-          <Card.Description className="text-xs sm:text-sm text-slate-400 mt-1">
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
             New entries auto-default to <span className="text-yellow-400 font-medium">pending</span> status for moderation clearance.
-          </Card.Description>
-        </Card.Header>
+          </p>
+        </div>
 
-        <Card.Content className="mt-6">
+        <div className="mt-6">
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Title */}
-            <TextField isRequired className={fieldClass}>
-              <Label className={labelClass}>Title</Label>
-              <Input
+            <div className={fieldClass}>
+              <label className={labelClass}>Title</label>
+              <input
+                required
                 placeholder="Enter prompt title"
                 value={formData.title}
                 onChange={(e) => handleChange("title", e.target.value)}
                 className={inputClass}
               />
-            </TextField>
+            </div>
 
             {/* Description */}
-            <TextField isRequired className={fieldClass}>
-              <Label className={labelClass}>Description</Label>
-              <TextArea
+            <div className={fieldClass}>
+              <label className={labelClass}>Description</label>
+              <textarea
+                required
                 placeholder="Describe your prompt"
                 value={formData.description}
                 onChange={(e) => handleChange("description", e.target.value)}
                 className={inputClass}
                 rows={3}
               />
-            </TextField>
+            </div>
 
             {/* Prompt Content */}
-            <TextField isRequired className={fieldClass}>
-              <Label className={labelClass}>Prompt Content</Label>
-              <TextArea
+            <div className={fieldClass}>
+              <label className={labelClass}>Prompt Content</label>
+              <textarea
+                required
                 placeholder="Enter the actual prompt content"
                 value={formData.content}
                 onChange={(e) => handleChange("content", e.target.value)}
                 className={inputClass}
                 rows={5}
               />
-            </TextField>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Category */}
-              <TextField isRequired className={fieldClass}>
-                <Label className={labelClass}>Category</Label>
-                <Input
+              <div className={fieldClass}>
+                <label className={labelClass}>Category</label>
+                <input
+                  required
                   placeholder="e.g. Marketing, Code"
                   value={formData.category}
                   onChange={(e) => handleChange("category", e.target.value)}
                   className={inputClass}
                 />
-              </TextField>
+              </div>
 
               {/* AI Tool */}
-              <TextField isRequired className={fieldClass}>
-                <Label className={labelClass}>AI Tool</Label>
-                <Input
+              <div className={fieldClass}>
+                <label className={labelClass}>AI Tool</label>
+                <input
+                  required
                   placeholder="e.g. ChatGPT, Claude"
                   value={formData.aiTool}
                   onChange={(e) => handleChange("aiTool", e.target.value)}
                   className={inputClass}
                 />
-              </TextField>
+              </div>
             </div>
 
             {/* Tags */}
-            <TextField className={fieldClass}>
-              <Label className={labelClass}>Tags</Label>
-              <Input
+            <div className={fieldClass}>
+              <label className={labelClass}>Tags</label>
+              <input
                 placeholder="react, nextjs, ai"
                 value={formData.tags}
                 onChange={(e) => handleChange("tags", e.target.value)}
                 className={inputClass}
               />
-            </TextField>
+            </div>
 
             {/* Difficulty Select */}
-            <Select
-              selectedKey={formData.difficulty}
-              onSelectionChange={(key) => handleChange("difficulty", key)}
-              className="flex flex-col gap-1.5"
-            >
-              <Label className={labelClass}>Difficulty</Label>
-              <Select.Trigger className="bg-[#130b2b]/60 border border-purple-900/40 hover:border-purple-500/60 data-[open]:border-cyan-400 text-white rounded-xl h-12 backdrop-blur-md px-3 flex items-center justify-between text-sm">
-                <Select.Value />
-                <Select.Indicator />
-              </Select.Trigger>
-
-              <Select.Popover className="bg-[#0d0624] border border-purple-500/30 text-white rounded-xl shadow-xl">
-                <ListBox>
-                  <ListBoxItem id="beginner" textValue="Beginner" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
-                    Beginner
-                  </ListBoxItem>
-                  <ListBoxItem id="intermediate" textValue="Intermediate" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
-                    Intermediate
-                  </ListBoxItem>
-                  <ListBoxItem id="pro" textValue="Pro" className="text-white hover:bg-purple-900/40 data-[focused]:bg-purple-900/40 cursor-pointer p-2 rounded-lg">
-                    Pro
-                  </ListBoxItem>
-                </ListBox>
-              </Select.Popover>
-            </Select>
+            <div className="flex flex-col gap-1.5">
+              <label className={labelClass}>Difficulty</label>
+              <select
+                value={formData.difficulty}
+                onChange={(e) => handleChange("difficulty", e.target.value)}
+                className="bg-[#130b2b]/60 border border-purple-900/40 hover:border-purple-500/60 text-white rounded-xl h-12 backdrop-blur-md px-3 flex items-center justify-between text-sm outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+              >
+                <option value="beginner" className="bg-[#0d0624]">Beginner</option>
+                <option value="intermediate" className="bg-[#0d0624]">Intermediate</option>
+                <option value="pro" className="bg-[#0d0624]">Pro</option>
+              </select>
+            </div>
 
             {/* Visibility */}
-            <RadioGroup
-              value={formData.visibility}
-              onChange={(value) => handleChange("visibility", value)}
-              orientation="horizontal"
-              className="flex flex-col gap-2"
-            >
-              <Label className={labelClass}>Visibility</Label>
+            <div className="flex flex-col gap-2">
+              <label className={labelClass}>Visibility</label>
               <div className="flex gap-4">
-                <Radio value="public" className="text-xs sm:text-sm text-slate-300">Public</Radio>
-                <Radio value="private" className="text-xs sm:text-sm text-slate-300">Private</Radio>
+                <label className="text-xs sm:text-sm text-slate-300 flex items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name="visibility"
+                    value="public"
+                    checked={formData.visibility === "public"}
+                    onChange={(e) => handleChange("visibility", e.target.value)}
+                  />
+                  Public
+                </label>
+                <label className="text-xs sm:text-sm text-slate-300 flex items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name="visibility"
+                    value="private"
+                    checked={formData.visibility === "private"}
+                    onChange={(e) => handleChange("visibility", e.target.value)}
+                  />
+                  Private
+                </label>
               </div>
-            </RadioGroup>
+            </div>
 
             {/* Thumbnail Upload */}
             <div className="flex flex-col gap-2">
@@ -266,17 +257,16 @@ export default function CreatePrompts({ user }) {
               </div>
             </div>
 
-            <Button
+            <button
               type="submit"
-              size="lg"
               disabled={isUploading}
-              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-4 bg-gradient-to-r from-[#b3ff00] to-[#88cc00] text-black font-extrabold text-base tracking-wider shadow-[0_0_25px_rgba(179,255,0,0.35)] hover:shadow-[0_0_35px_rgba(179,255,0,0.6)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl"
             >
               {isUploading ? "Uploading & Submitting..." : "Submit Prompt"}
-            </Button>
+            </button>
           </form>
-        </Card.Content>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

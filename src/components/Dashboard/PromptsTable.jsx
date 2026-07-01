@@ -78,7 +78,7 @@ const PromptsTable = ({ prompts }) => {
                         </Table.Header>
                         <Table.Body>
                             {prompts?.map((prompt) => {
-                                const promptId = prompt._id?.$oid || prompt._id;
+                                const promptId = prompt._id?.$oid || prompt._id || prompt.id;
                                 const statusInfo = getStatusDetails(prompt.status);
 
                                 return (

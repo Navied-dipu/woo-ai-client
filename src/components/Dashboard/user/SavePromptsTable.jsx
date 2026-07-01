@@ -84,13 +84,13 @@ export default function SavedPromptsTable({ prompts = [], userId }) {
                                     <td className="px-6 py-4">
                                         <div className="flex justify-center gap-3 text-xl">
                                             {/* VIEW BUTTON */}
-                                            <Link href={`/allprompts/${promptItem._id}`} title="View Prompt" className="text-blue-500 hover:text-blue-700">
+                                            <Link href={`/allprompts/${promptItem._id || promptItem.id}`} title="View Prompt" className="text-blue-500 hover:text-blue-700">
                                                 👁️
                                             </Link>
 
                                             {/* DELETE BUTTON */}
                                             <button
-                                                onClick={() => handleDelete(promptItem._id)}
+                                                onClick={() => handleDelete(promptItem._id || promptItem.id)}
                                                 className="text-red-500 hover:text-red-700"
                                                 title="Delete Prompt"
                                             >

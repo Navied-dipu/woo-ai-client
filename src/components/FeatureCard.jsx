@@ -36,7 +36,7 @@ export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {prompts.map((prompt, index) => (
-          <FadeIn key={prompt._id || index} delay={index * 0.1}>
+          <FadeIn key={prompt._id || prompt.id || index} delay={index * 0.1}>
             <Card className="h-full bg-content1/40 backdrop-blur-sm border border-default-100 hover:border-primary/50 transition-colors" isHoverable>
               <CardHeader className="flex justify-between items-start gap-3">
                 <div className="flex gap-3 items-center">
@@ -64,7 +64,7 @@ export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
                   size="sm" 
                   variant="flat" 
                   className="gap-1.5 inline-flex items-center" 
-                  onPress={() => handleViewDetails(prompt._id)}
+                  onPress={() => handleViewDetails(prompt._id || prompt.id)}
                 >
                   View Details
                   <ShoppingCart size={14} />
