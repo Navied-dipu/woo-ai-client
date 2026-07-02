@@ -9,8 +9,8 @@ const usersDemoData = [
 
 export default function UserManagement() {
   return (
-    <div className="min-h-screen bg-[#F9F9F9] font-sans antialiased text-[#1A1A1A] p-6 md:p-10">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#F9F9F9] font-sans antialiased text-[#1A1A1A] p-4 md:p-10 w-full min-w-0">
+      <div className="max-w-7xl mx-auto space-y-8 w-full min-w-0">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 pb-6">

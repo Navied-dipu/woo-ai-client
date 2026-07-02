@@ -7,12 +7,11 @@ import { getPlanById } from '@/lib/api/plan';
 
 export const dynamic = "force-dynamic";
 
-const Page = async () => {
+export default async function Page() {
     const user = await getUserSession();
-console.log(user)
-    // Mocked plan data - consider moving this to a DB or config later
+    // console.log(user);
+
     const planData = await getPlanById(user?.plan || "creator_free");
-    // Fallback if the database doesn't return the plan
     const plan = planData || {
         name: "Creator Free (Fallback)",
         maxCreatePromptsPerMonth: 5,
@@ -20,18 +19,16 @@ console.log(user)
 
     const prompts = await getPromptsByUserId(user.id);
     const promptsCount = prompts.length;
-    // console.log(promptsCount)
     const remainingPrompts = Math.max(0, (plan.maxCreatePromptsPerMonth || 5) - promptsCount);
 
-    // Calculate percentage for a visual progress bar
     const maxPrompts = plan.maxCreatePromptsPerMonth || 5;
     const usagePercentage = Math.min(100, (promptsCount / maxPrompts) * 100);
     const isLimitReached = promptsCount >= maxPrompts;
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
             {/* Header Section */}
-            <div className="md:flex md:items-center md:justify-between border-b border-gray-200 pb-5 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 pb-5 mb-8 gap-4">
                 <div className="min-w-0 flex-1">
                     <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl tracking-tight">
                         Prompt Creator Studio
@@ -67,8 +64,9 @@ console.log(user)
                         {/* Progress Bar */}
                         <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                             <div
-                                className={`h-2.5 rounded-full transition-all duration-500 ${isLimitReached ? 'bg-red-500' : usagePercentage > 80 ? 'bg-amber-500' : 'bg-blue-600'
-                                    }`}
+                                className={`h-2.5 rounded-full transition-all duration-500 ${
+                                    isLimitReached ? 'bg-red-500' : usagePercentage > 80 ? 'bg-amber-500' : 'bg-blue-600'
+                                }`}
                                 style={{ width: `${usagePercentage}%` }}
                             />
                         </div>
@@ -86,10 +84,7 @@ console.log(user)
                 {/* Main Content Area / Creation Form */}
                 <div className="lg:col-span-2">
                     {!isLimitReached ? (
-                        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Prompt</h3>
-                            <CreatePrompts user={user} />
-                        </div>
+                        <CreatePrompts user={user} />
                     ) : (
                         <div className="text-center py-12 px-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50">
                             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -98,11 +93,12 @@ console.log(user)
                             <h3 className="mt-2 text-sm font-semibold text-gray-900">Limit Reached</h3>
                             <p className="mt-1 text-sm text-gray-500">Ready to build more? Unlock unlimited creations instantly.</p>
                             <div className="mt-6">
-                                <button type="button" className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors">
-                                    <Link href="/plan">
-                                        Upgrade to Pro
-                                    </Link>
-                                </button>
+                                <Link 
+                                    href="/plan" 
+                                    className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+                                >
+                                    Upgrade to Pro
+                                </Link>
                             </div>
                         </div>
                     )}
@@ -110,6 +106,4 @@ console.log(user)
             </div>
         </div>
     );
-};
-
-export default Page;
+}

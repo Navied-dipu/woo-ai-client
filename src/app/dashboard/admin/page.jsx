@@ -17,11 +17,11 @@ const recentSales = [
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-[#F9F9F9] font-sans antialiased text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#F9F9F9] font-sans antialiased text-[#1A1A1A] w-full min-w-0">
       {/* Sidebar / Navbar Wrapper */}
-      <div className="flex">
+      <div className="flex w-full min-w-0">
         {/* Main Content Area */}
-        <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto space-y-8">
+        <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto space-y-8 w-full min-w-0">
           
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 pb-6">

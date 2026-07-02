@@ -61,7 +61,7 @@ export default function UpdatePrompts({ prompt }) {
             const imgData = new FormData();
             imgData.append("image", formData.thumbnail);
 
-            const IMGBB_API_KEY = "d927b80d9cb8079967b7e6672eaad49e";
+            const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
             try {
                 const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
