@@ -1,24 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, Button, Chip, Avatar } from "@heroui/react";
 import { Bookmark, Flag, Copy, Star } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toggleBookmark, updateCopyCount } from "@/lib/action/prompts";
 import { useRouter } from "next/navigation";
 
-
 export default function PromptDetails({ prompts, currentUser }) {
- // Replace with actual user session data
-  // ✅ Hooks must always be at the top — before any conditional returns
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [localCopies, setLocalCopies] = useState(0);
   const router = useRouter();
 
-  // const isLoggedIn = false; // TODO: replace with actual session check
-
-  // Early return AFTER hooks
   if (!prompts) return (
     <div className="text-center text-slate-400 p-8">Loading specifications...</div>
   );
@@ -30,19 +23,13 @@ export default function PromptDetails({ prompts, currentUser }) {
     if (!currentUser) {
       return toast.error("Please log in to bookmark.", { theme: "dark" });
     }
-
-    // Optimistic UI updates
     const previousState = isBookmarked;
     setIsBookmarked(!previousState);
-
     try {
-      // Send both promptId and userId to the server action
       await toggleBookmark(promptId, currentUser.id);
-
       toast.success(!previousState ? "Prompt bookmarked" : "Bookmark removed", { theme: "dark" });
       router.refresh();
     } catch (err) {
-      // Revert UI if the server action fails
       setIsBookmarked(previousState);
       toast.error("Failed to update bookmark. Please try again.", { theme: "dark" });
     }
@@ -66,8 +53,8 @@ export default function PromptDetails({ prompts, currentUser }) {
 
         {/* LEFT: Prompt Content & Instructions */}
         <div className="lg:col-span-2 space-y-6">
-          <Card radius="lg" shadow="sm" className="bg-[#0f1322] border border-slate-800/60 p-6">
-            <CardContent className="p-0 space-y-6 overflow-visible">
+          <div className="bg-[#0f1322] border border-slate-800/60 rounded-2xl p-6">
+            <div className="p-0 space-y-6 overflow-visible">
 
               {/* Title & Actions */}
               <div className="flex items-start justify-between gap-4">
@@ -80,20 +67,18 @@ export default function PromptDetails({ prompts, currentUser }) {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    isIconOnly variant="bordered" radius="md"
-                    className="border-slate-800 bg-[#161b30] text-slate-300 min-w-10 h-10 hover:border-cyan-500"
+                  <button
+                    className="border border-slate-800 bg-[#161b30] text-slate-300 min-w-10 h-10 flex items-center justify-center rounded-lg hover:border-cyan-500 transition-colors"
                     onClick={handleBookmarkToggle}
                   >
                     <Bookmark size={17} className={isBookmarked ? "fill-cyan-400 text-cyan-400" : ""} />
-                  </Button>
-                  <Button
-                    isIconOnly variant="bordered" radius="md"
-                    className="border-slate-800 bg-[#161b30] text-slate-300 min-w-10 h-10 hover:border-rose-500"
+                  </button>
+                  <button
+                    className="border border-slate-800 bg-[#161b30] text-slate-300 min-w-10 h-10 flex items-center justify-center rounded-lg hover:border-rose-500 transition-colors"
                     onClick={() => toast.warning("Report logged.", { theme: "dark" })}
                   >
                     <Flag size={17} />
-                  </Button>
+                  </button>
                 </div>
               </div>
 
@@ -101,14 +86,13 @@ export default function PromptDetails({ prompts, currentUser }) {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-slate-200">Prompt Template</h3>
-                  <Button
-                    size="sm" variant="bordered" radius="md"
-                    className="border-slate-800 bg-[#161b30] text-slate-200 text-xs font-medium px-4 h-8"
-                    startContent={<Copy size={13} />}
+                  <button
+                    className="border border-slate-800 bg-[#161b30] text-slate-200 text-xs font-medium px-4 h-8 flex items-center gap-1.5 rounded-lg hover:border-slate-600 transition-colors"
                     onClick={handleCopyText}
                   >
+                    <Copy size={13} />
                     Copy
-                  </Button>
+                  </button>
                 </div>
                 <div className="p-5 rounded-xl bg-[#060913] border border-slate-900 font-mono text-sm leading-relaxed text-purple-400/90 whitespace-pre-wrap select-all">
                   {content || "No prompt content structured."}
@@ -123,28 +107,28 @@ export default function PromptDetails({ prompts, currentUser }) {
                 </p>
               </div>
 
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         {/* RIGHT: Properties Sidebar */}
         <div className="space-y-6">
-          <Card radius="lg" shadow="sm" className="bg-[#0f1322] border border-slate-800/60 p-6">
-            <CardContent className="p-0 space-y-6">
+          <div className="bg-[#0f1322] border border-slate-800/60 rounded-2xl p-6">
+            <div className="p-0 space-y-6">
               <h2 className="text-base font-bold text-white tracking-wide">Prompt Details</h2>
 
               <div className="space-y-4 text-xs font-medium">
                 <div className="flex justify-between items-center">
                   <span className="text-slate-400">AI Engine</span>
-                  <Chip size="sm" radius="sm" className="bg-[#241a42] text-purple-300 font-bold px-2.5 h-6 text-[10px] tracking-wider">
+                  <span className="bg-[#241a42] text-purple-300 font-bold px-2.5 h-6 inline-flex items-center text-[10px] tracking-wider rounded-md">
                     {aiTool?.toUpperCase()}
-                  </Chip>
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-400">Category</span>
-                  <Chip size="sm" radius="sm" className="bg-[#112d32] text-cyan-300 font-bold px-2.5 h-6 text-[10px] tracking-wider">
+                  <span className="bg-[#112d32] text-cyan-300 font-bold px-2.5 h-6 inline-flex items-center text-[10px] tracking-wider rounded-md">
                     {category?.toUpperCase()}
-                  </Chip>
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-400">Difficulty</span>
@@ -179,7 +163,9 @@ export default function PromptDetails({ prompts, currentUser }) {
               <div className="pt-4 border-t border-slate-800/40 space-y-3">
                 <h3 className="text-xs font-bold text-slate-200 tracking-wider">Creator Information</h3>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-[#14192b] border border-slate-800/40">
-                  <Avatar name={_id?.charAt(0).toUpperCase()} size="sm" className="bg-slate-800 text-slate-300 font-bold w-9 h-9" />
+                  <div className="w-9 h-9 rounded-full bg-slate-800 text-slate-300 font-bold flex items-center justify-center text-sm">
+                    {typeof _id === "string" ? _id.charAt(0).toUpperCase() : "?"}
+                  </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-slate-200 truncate">Prompt Engineer Creator</span>
                     <span className="text-[11px] font-mono text-slate-500 truncate">{_id}</span>
@@ -187,8 +173,8 @@ export default function PromptDetails({ prompts, currentUser }) {
                 </div>
               </div>
 
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
       </div>

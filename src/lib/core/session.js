@@ -1,3 +1,4 @@
+"use server"
 import { headers } from "next/headers";
 import { auth } from "../auth"; // Verify this points cleanly to your server betterAuth instance
 
