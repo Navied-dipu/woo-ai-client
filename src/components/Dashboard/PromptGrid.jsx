@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Input, Select, ListBox } from "@heroui/react";
+import { Input, Select, ListBox, Pagination } from "@heroui/react"; // 1. Added Pagination here
 import PromptCard from "./PromptCard";
 
-// Clean, minimal SVG Search Icon
 const SearchIcon = () => (
     <svg 
         xmlns="http://www.w3.org/2000/svg" 
@@ -18,7 +17,6 @@ const SearchIcon = () => (
     </svg>
 );
 
-// Sleek, minimal Chevron Arrow Icon
 const ChevronIcon = () => (
     <svg 
         xmlns="http://www.w3.org/2000/svg" 
@@ -36,8 +34,11 @@ export default function PromptGrid({ initialPrompts = [] }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedAiTool, setSelectedAiTool] = useState("all");
     const [selectedCategory, setSelectedCategory] = useState("all");
+    
+    // 2. Pagination State variables
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8; // Change this to how many cards you want per page
 
-    // 1. Extract unique AI Tools and Categories dynamically
     const aiTools = useMemo(() => {
         const tools = initialPrompts.map((p) => p.aiTool).filter(Boolean);
         return ["all", ...new Set(tools)];
@@ -48,7 +49,6 @@ export default function PromptGrid({ initialPrompts = [] }) {
         return ["all", ...new Set(cats)];
     }, [initialPrompts]);
 
-    // 2. Filter prompts dynamically
     const filteredPrompts = useMemo(() => {
         return initialPrompts.filter((prompt) => {
             const matchesSearch =
@@ -67,13 +67,28 @@ export default function PromptGrid({ initialPrompts = [] }) {
         });
     }, [searchQuery, selectedAiTool, selectedCategory, initialPrompts]);
 
+    // 3. Reset to page 1 whenever a filter or search criteria changes
+    useMemo(() => {
+        setCurrentPage(1);
+    }, [searchQuery, selectedAiTool, selectedCategory]);
+
+    // 4. Slice data to get only the current page's items
+    const paginatedPrompts = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return filteredPrompts.slice(start, end);
+    }, [filteredPrompts, currentPage, itemsPerPage]);
+
+    // 5. Calculate total pages dynamically
+    const totalPages = Math.ceil(filteredPrompts.length / itemsPerPage);
+
     return (
         <div className="space-y-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {/* Elegant Light Mode Control Bar Layout */}
+            {/* Control Bar Layout */}
             <div className="flex flex-col md:flex-row gap-3 w-full bg-white p-3 rounded-2xl border border-neutral-100 shadow-sm">
                 
-                {/* Modern Input Bar Wrap */}
+                {/* Search Bar Wrap */}
                 <div className="flex-1 group">
                     <Input
                         type="text"
@@ -81,7 +96,7 @@ export default function PromptGrid({ initialPrompts = [] }) {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         startContent={<SearchIcon />}
-                        className="text-neutral-800"
+                        className="text-neutral-800 w-full"
                         classNames={{
                             input: "text-neutral-800 placeholder:text-neutral-400 text-xs bg-transparent outline-none border-none focus:ring-0 ml-1.5",
                             inputWrapper: [
@@ -96,7 +111,7 @@ export default function PromptGrid({ initialPrompts = [] }) {
                     />
                 </div>
 
-                {/* AI Tool Dropdown Menu Wrapper */}
+                {/* AI Tool Dropdown Menu */}
                 <div className="w-full md:w-48">
                     <Select
                         aria-label="Filter by AI Tool"
@@ -131,7 +146,7 @@ export default function PromptGrid({ initialPrompts = [] }) {
                     </Select>
                 </div>
 
-                {/* Category Dropdown Menu Wrapper */}
+                {/* Category Dropdown Menu */}
                 <div className="w-full md:w-48">
                     <Select
                         aria-label="Filter by Category"
@@ -174,11 +189,36 @@ export default function PromptGrid({ initialPrompts = [] }) {
                     <p className="text-neutral-400 text-xs mt-1">Try tweaking your filters or search criteria.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-                    {filteredPrompts.map((item) => {
-                        const id = item._id?.$oid || item._id || item.id;
-                        return <PromptCard key={id} prompt={{ ...item, _id: id }} />;
-                    })}
+                <div className="space-y-8 flex flex-col items-center">
+                    {/* Render from paginatedPrompts instead of filteredPrompts */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center w-full">
+                        {paginatedPrompts.map((item) => {
+                            const id = item._id?.$oid || item._id || item.id;
+                            return <PromptCard key={id} prompt={{ ...item, _id: id }} />;
+                        })}
+                    </div>
+
+                    {/* 6. Pagination controls footer UI */}
+                    {totalPages > 1 && (
+                        <div className="flex justify-center pt-4">
+                            <Pagination
+                                isCompact
+                                showControls
+                                color="primary"
+                                page={currentPage}
+                                total={totalPages}
+                                onChange={(page) => {
+                                    setCurrentPage(page);
+                                    window.scrollTo({ top: 0, behavior: "smooth" }); // Smooth scroll back to top on switch
+                                }}
+                                classNames={{
+                                    wrapper: "gap-1 shadow-none bg-transparent",
+                                    item: "w-8 h-8 text-xs font-medium rounded-xl border border-neutral-200/60 text-neutral-600 bg-white hover:bg-neutral-50 data-[active=true]:bg-[#0080FF] data-[active=true]:text-white data-[active=true]:border-[#0080FF]",
+                                    cursor: "bg-[#0080FF] rounded-xl"
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
             )}
         </div>
