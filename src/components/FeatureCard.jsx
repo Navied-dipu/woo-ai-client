@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Bookmark, ArrowRight, ShoppingCart, Copy, Flame } from "lucide-react";
 import FadeIn from "./Fadein";
 import { getPrompts } from "@/lib/api/prompts";
+import Link from "next/link";
 
 export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
   const router = useRouter();
@@ -37,13 +38,7 @@ export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
     fetchAndSortPrompts();
   }, [prompts]);
 
-  const handleViewDetails = (id) => {
-    if (!isLoggedIn) {
-      router.push("/login");
-    } else {
-      router.push(`/prompts/${id}`);
-    }
-  };
+ 
 
   return (
     <section className="py-20 px-4 max-w-7xl mx-auto">
@@ -118,12 +113,12 @@ export default function FeaturedPrompts({ isLoggedIn, prompts = [] }) {
                   size="sm"
                   variant="flat"
                   className="gap-1.5 inline-flex items-center"
-                  onPress={() => handleViewDetails(prompt._id?.$oid || prompt._id || prompt.id)}
+                 
                 >
-                  View Details
+                  <Link href={`/allprompts/${prompt?._id}`}> View Details</Link>
                   <ShoppingCart size={14} />
                 </Button>
-              </CardFooter>
+              </CardFooter> 
             </Card>
           </FadeIn>
         ))}
